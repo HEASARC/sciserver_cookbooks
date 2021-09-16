@@ -10,3 +10,9 @@ designed for HEASARC@SciServer.  We include
 
 Community inputs are welcomed and encouraged!  After vetting by HEASARC,
 we can add them to our contrib area.
+
+(Please run
+
+> jupyter nbconvert --clear-output --inplace *ipynb
+
+before committing any changes to notebooks.)
