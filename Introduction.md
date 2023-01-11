@@ -22,6 +22,9 @@ Please make sure the HEASARC data drive is mounted when initializing the sciserv
 
 &#9672; [Simple Data Access Tutorial](data_find_download.ipynb): A simple example of finding HEASARC data on a specific source using [pyvo](https://pyvo.readthedocs.io/en/latest/) and downloading it. 
 
+&#9672; [Working with Region Files Using jdaviz](jdaviz-demo.ipynb): An example of using [jdaviz](https://jdaviz.readthedocs.io/en/latest/) inside a jupyter notebook to create region files that can be used in heasoft analysis pipelines. 
+>>>>>>> bede84c (added jdaviz demo with a link in the intro doc)
+
 &#9672; [NuSTAR Light Curves](nustar_lightcurve_example.ipynb): This tutorial shows how extract and start analyzing the light curve of an AGN from one NuSTAR observation.
 
 &#9672; [NICER Example](nicer-example.ipynb): This tutorial goes through the steps of analyzing a NICER observation of `PSR_B0833-45` (`obsid = 4142010107`) using `heasoftpy`.
