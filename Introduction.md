@@ -7,6 +7,7 @@ The following notebook tutorials provide some examples of how to use the softwar
 
 <div style='color: #666; background: #eee; padding:10px'>
 Please make sure the HEASARC data drive is mounted when initializing the sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
+<p>Also, make sure to run the notebooks using the (heasoft) kernel</p>
 </div>
 
 ---
@@ -18,6 +19,8 @@ Please make sure the HEASARC data drive is mounted when initializing the sciserv
 &#9672; [Data Access Tutorial](data_access.ipynb): Detailed examples of accessing HEASARC data holdings with the Virtual Observatory protocols using [pyvo](https://pyvo.readthedocs.io/en/latest/). 
 
 &#9672; [Querying A List of Sources](source_list_querying.ipynb): An example searching the HEASARC master tables for a large list of sources supplied by the user using SQL and TAP services. 
+
+&#9672; [Simple Data Access Tutorial](data_find_download.ipynb): A simple example of finding HEASARC data on a specific source using [pyvo](https://pyvo.readthedocs.io/en/latest/) and downloading it. 
 
 &#9672; [NuSTAR Light Curves](nustar_lightcurve_example.ipynb): This tutorial shows how extract and start analyzing the light curve of an AGN from one NuSTAR observation.
 
