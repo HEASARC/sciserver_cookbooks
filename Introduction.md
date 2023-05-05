@@ -17,6 +17,8 @@ Please make sure the HEASARC data drive is mounted when initializing the sciserv
 
 &#9672; [Data Access Tutorial](data_access.ipynb): Detailed examples of accessing HEASARC data holdings with the Virtual Observatory protocols using [pyvo](https://pyvo.readthedocs.io/en/latest/). 
 
+&#9672; [Querying A List of Sources](source_list_querying.ipynb): An example searching the HEASARC master tables for a large list of sources supplied by the user using SQL and TAP services. 
+
 &#9672; [NuSTAR Light Curves](nustar_lightcurve_example.ipynb): This tutorial shows how extract and start analyzing the light curve of an AGN from one NuSTAR observation.
 
 &#9672; [NICER Example](nicer-example.ipynb): This tutorial goes through the steps of analyzing a NICER observation of `PSR_B0833-45` (`obsid = 4142010107`) using `heasoftpy`.
@@ -32,4 +34,4 @@ Please make sure the HEASARC data drive is mounted when initializing the sciserv
 <br />
 
 ---
-Last updated: 05/31/2022
+Last updated: 05/03/2023
