@@ -23,7 +23,6 @@ Please make sure the HEASARC data drive is mounted when initializing the sciserv
 &#9672; [Simple Data Access Tutorial](data_find_download.ipynb): A simple example of finding HEASARC data on a specific source using [pyvo](https://pyvo.readthedocs.io/en/latest/) and downloading it. 
 
 &#9672; [Working with Region Files Using jdaviz](jdaviz-demo.ipynb): An example of using [jdaviz](https://jdaviz.readthedocs.io/en/latest/) inside a jupyter notebook to create region files that can be used in heasoft analysis pipelines. 
->>>>>>> bede84c (added jdaviz demo with a link in the intro doc)
 
 &#9672; [IXPE Introduction](ixpe_intro.ipynb): This tutorial walks through an example of analyzing data from IXPE, illustrating how to extract source and background spectra and perform spectro-polarimetric fits.
 
