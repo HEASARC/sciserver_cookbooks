@@ -5,36 +5,74 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.15.2
+      jupytext_version: 1.16.0
   kernelspec:
-    display_name: (heasoft)
+    display_name: heasoft
     language: python
     name: heasoft
 ---
 
-## Getting Started
+# Getting Started With HEASARC Data On Sciserver
+---
+- **Description:** A quick introduction on using HEASARC data on Sciserver.
+- **Level:** Beginner
+- **Data:** We will use 4 observations of `Cyg X-1` from NuSTAR as an example.
+- **Requirements:** Run in the (heasoft) conda environment on Sciserver.
+- **Credit:** Abdu Zoghbi (May 2022).
+- **Support:** Contact the [HEASARC helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
+- **Last verified to run:** 01/22/2024
 
-This notebooks contains some tips on getting started with accessing and using HEASARC data on Sciserver.
+---
 
 
-### Finding and Exploring the data
+## 1. Introduction
+In this notebooke, we present a brief overview of a typical analysis flow. It can be used as a quick reference.
+We will go through example of **findning**, **accessing** and then **analyzing** some example data.
+
+We will be using 4 NuSTAR observation of **Cyg-X1**.
+
+<div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
+<b>Running On Sciserver:</b><br>
+When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
+<br><br>
+<b>Running Outside Sciserver:</b><br>
+This notebook runs in the heasoftpy conda environment on Sciserver.
+If running outside Sciserver, some changes will be needed, including:<br>
+&bull; Make sure heasoftpy and heasoft are correctly installed (<a herf='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
+&bull; Unlike on Sciserver, where the data is available locally, you will need to download the data to your machine.<br>
+</div>
+
+
+## 2. Module Imports
+We need the following python modules:
+
+
+```python
+import glob
+
+# for finding data
+import pyvo
+
+# for data analysis
+import heasoftpy as hsp
+```
+
+## 3. Finding and Exploring the data
 
 The Heasarc data holdings can be searched and explored in different ways:
-- Using the powerful [Xamin Web Interface](https://heasarc.gsfc.nasa.gov/xamin/xamin.jsp).
+- Using [Xamin Web Interface](https://heasarc.gsfc.nasa.gov/xamin/xamin.jsp).
 
 - Using a virtual observatory (VO) client such as [pyVO](https://github.com/astropy/pyvo) (see below) or [Topcat](http://www.star.bris.ac.uk/~mbt/topcat/).
 
 - Using the classical [Browse Mission Interface](https://heasarc.gsfc.nasa.gov/cgi-bin/W3Browse/w3browse.pl).
 
-In Section 1. below, we give a quick example on how to use pyVO to search for NuSTAR data on a specific object. Alternatively, in section 2 assumes you can use Xamin to obtain a list of observations you are interested in. 
+In [Section 3.1](#3.1-pyvo-example) below, we give an example on how to use `pyVO` to search for NuSTAR data on a specific object. Alternatively, [Section 3.2](#3.2-using-xamin) assumes you can use Xamin to obtain a list of observations you are interested in. For more details on finding and accessing data, see the [data-find-download](data_find_download.md) notebook.
 
-The outcome of sections 1 and 2 is the same, so you can follow either of them.
+The outcome of sections 3.1 and 3.2 is the same, so you can follow either of them.
 
 <!-- #region jp-MarkdownHeadingCollapsed=true -->
----
-#### 1. pyVO Example
+### 3.1 Using Virtual Observatory Client pyVO:
 <!-- #endregion -->
-
 
 We first search the Virtual Observatory (VO) *registry* for data provided by `heasarc`. The registry provides an index of all data providers that allow access using VO standards.
 
@@ -98,13 +136,14 @@ for i in range(4):
     print(path)
 ```
 
----
-#### 2. Using Xamin:
+### 3.2 Using The Web Portal Xamin:
 
 
-Here, we use Xamin to find the data. We again use *numaster*, the master catalog for *NuSTAR*, and search for data the X-ray binary **Cyg X-1**.
+Here, we use [Xamin](https://heasarc.gsfc.nasa.gov/xamin) to find the data. We again use *numaster*, the master catalog for *NuSTAR*, and search for data the X-ray binary **Cyg X-1**.
 
 When using Xamin to find the data, there is an option in the `Data Products Cart` to select `FTP Paths`, which, when selecting the first 4 datasets, provides a text similar to the following:
+
+> Note that for the purpose of this tutorual, you can choose any observations
 
 ```python
 paths_txt = """
@@ -116,22 +155,23 @@ paths_txt = """
 paths = paths_txt.split('\n')[1:-1]
 ```
 
+
 ---
----
-### Accessing The Data
+## 4. Accessing The Data
 All the heasarc data is mounted into the compute under `/FTP/`, so once we have the path to the data (though `pyVO` or Xamin), we can directly access it without the need to download it.
 
 So to check the content of the observational folder for the first observations of `cyg x-1`, we can do:
 
 ```python
-import glob
 glob.glob(f'{paths[0]}/*')
 ```
 
 ---
 ---
-### Analyzing The Data
-To Analyze the data within the notebook, we use `heasoftpy`. In the *NuSTAR* example, we can call the `nupipeline` tool to re-prodduce the cleaned event files.
+### 5. Analyzing The Data
+To Analyze the data within the notebook, we use `heasoftpy`. In the NuSTAR example, we can call the `nupipeline` tool to produce the cleaned event files.
+
+We focus on observation: `30001011002`
 
 ```python
 import heasoftpy as hsp
@@ -153,5 +193,9 @@ Once the task finishes running, we see the new cleaned event files in the local 
 
 ---
 ---
-### Subsequent Analysis
+## 6. Subsequent Analysis
 For subsequent analysis, you can use `heasoftpy` which provides a python access to all tools in `heasoft`, as well as `pyxspec` to spectral modeling.
+
+```python
+
+```

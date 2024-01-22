@@ -5,38 +5,82 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.15.2
+      jupytext_version: 1.16.0
   kernelspec:
     display_name: (heasoft)
     language: python
     name: heasoft
 ---
 
-# An Example Analysing NICER Data One Sciserver
+# Analysing NICER Data On Sciserver
+<hr style="border: 2px solid #fadbac" />
+
+- **Description:** An example on analysing NICER data on Sciserver using heasoftpy.
+- **Level:** Beginner.
+- **Data:** NICER observation of **PSR_B0833-45** (obsid = 4142010107)
+- **Requirements:** `heasoftpy`, `xspec`, `astropy`, `matplotlib`
+- **Credit:** Mike Corcoran / Abdu Zoghbi (May 2022).
+- **Support:** Contact the [HEASARC helpdesk or NICER Guest Observer Facility (GOF)](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
+- **Last verified to run:** 01/26/2024.
+
+<hr style="border: 2px solid #fadbac" />
+
+<!-- #region -->
+## 1. Introduction
 
 In this tutorial, we will go through the steps of analyzing a NICER observation of `PSR_B0833-45` (`obsid = 4142010107`) using `heasoftpy`.
 
-The following assumes this notebook is run from the (heasoft) environment on Sciserver. You should see `(Heasoft)` at the top right of the notebook. If not, click there and select `(Heasoft)`. Heasoft higher than v6.31 is required in order to be able to run `nicerl3` tools.
 
-If running outside sciserver, please ensure that heasoft v6.31 or above is installed.
+<div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
+<b>Running On Sciserver:</b><br>
+When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
+<br>
+Also, this notebook requires <code>heasoftpy</code>, which is available in the (heasoft) conda environment. You should see (heasoft) at the top right of the notebook. If not, click there and select it.
+
+<br>
+Heasoft higher than v6.31 is required in order to be able to run <code>nicerl3</code> tools.
+<br><br>
+
+<b>Running Outside Sciserver:</b><br>
+If running outside Sciserver, some changes will be needed, including:<br>
+&bull; Make sure heasoftpy and heasoft (higher than v6.31) are installed (<a herf='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
+&bull; Unlike on Sciserver, where the data is available locally, you will need to download the data to your machine.<br>
+</div>
+<!-- #endregion -->
+
+## 2. Module Imports
+We need the following python modules:
+
+<div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
+Note that for heasoftpy < 1.4, <code>nicerl2</code> is accessed via <code>heasoftpy.nicerl2</code>. For heasoftpy >= 1.4, it is available under a separate module called <code>nicer</code> that needs to be imported explicitly with <code>from heasoftpy import nicer</code>
+</div>
 
 ```python
 ## Import libraries that we will need.
-import heasoftpy as hsp
-import xspec as xs
-from astropy.io import fits
-from astropy.table import Table
 import os
 import sys
-import matplotlib.pylab as plt
+from astropy.io import fits
+from astropy.table import Table
 import numpy as np
+import matplotlib.pylab as plt
+
+import heasoftpy as hsp
+import xspec as xs
+
+from packaging import version
+if version.parse(hsp.__version__) < version.parse('1.4'):
+    nicer = hsp
+else:
+    from heasoftpy import nicer
 ```
 
-# Set up the NICER obsid directory
+## 3. Set up the NICER obsid directory
 
-We are using OBSID `4142010107`. The data archive is mounted under `/FTP/..`. To find the exact location of the observation, we can use `pyvo` to query the archive using the VO services, or use Xamin, as illustrated in the `Getting-Started` and `data_access` notebooks
+We are using OBSID `4142010107`. The data archive is mounted under `/FTP/..`. To find the exact location of the observation, we can use `pyvo` to query the archive using the VO services, or use Xamin, as illustrated in the [Getting Started](getting-started.md) and [Data Access](data-access.md) tutorials.
 
-Because nicerl2 may modify of the observation directory, we copy it from the data location.
+Because `nicerl2` may modify of the observation directory, we copy it from the data location. If running the notebook outside Sciserver, the data will need to be downloaded from the archive.
+
+We will use the current directory as a working directory.
 
 ```python
 nicerobsID = '4020180460'
@@ -47,10 +91,10 @@ if not os.path.exists(nicerobsID):
     os.system(f'cp -r {dataLocation} {work_dir}')
 ```
 
-# Process and Clean the Data.
+## 4. Process and Clean the Data.
 Next, we run the `nicerl2` pipeline to process and clean the data using `heasoftpy`
 
-There are different ways of calling a `heasoftpy` task. Here, we first create a dictionary that contains the input parameters for the `nicerl2` task, which is then passed to `hsp.nicerl2`
+There are different ways of calling a `heasoftpy` task. Here, we first create a dictionary that contains the input parameters for the `nicerl2` task, which is then passed to `nicer.nicerl2`
 
 ```python
 # input
@@ -64,7 +108,7 @@ inPars = {
 }
 
 # run the task
-out = hsp.nicerl2(inPars)
+out = nicer.nicerl2(inPars)
 
 # check that everything run correctly
 if out.returncode == 0: 
@@ -76,21 +120,21 @@ else:
         fp.write('\n'.join(out.output))
 ```
 
-<!-- #region -->
-# Extract the Spectra using `nicerl3-spect`
+## 5. Extract the Spectra using `nicerl3-spect`
 
 We use `nicerl3-spect3` (which is available in heasoft v6.31 and up).
 
-#### Note
-> Note that the `-` symbol in the name is replace by `_` when calling the equivalent python name, so that `nicerl3-spect3` becomes `nicerl3_spect3`
+<div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
+Note that the <b>-</b> symbol in the name is replace by <b>_</b> (underscore) when calling the equivalent python name, so that <code>nicerl3-spect3</code> becomes <code>nicerl3_spect3</code>
+</div>
 
+<br>
 
 For this example, we use the `scorpeon` background model to create a background pha file. You can choose other models too, if needed.
 
 The spectra are written to the `spec` directory. 
 
 Note that we set the parameter `updatepha` to `yes`, so that the header of the spectral file is modifered to point to the relevant response and background files.
-<!-- #endregion -->
 
 ```python
 # Setup the output directory
@@ -116,7 +160,7 @@ inPars = {
 }
 
 # run the spectral extraction task
-out = hsp.nicerl3_spect(inPars)
+out = nicer.nicerl3_spect(inPars)
 
 # check that the task run correctly
 if out.returncode == 0: 
@@ -127,16 +171,16 @@ else:
     print(f'ERROR in nicerl3-spect {nicerobsID}; Writing log to {logfile}')
     with open(logfile, 'w') as fp:
         fp.write('\n'.join(out.output))
-        
 ```
 
 <!-- #region -->
-# Extract the Light Curve using `nicerl3-lc`
+## 6. Extract the Light Curve using `nicerl3-lc`
 
 We use `nicerl3-lc` (which is available in heasoft v6.31 and up).
 
-#### Note
-> Note that, similar to `nicerl3_spect`, the `-` symbol in the name is replace by `_` when calling the equivalent python name, so that `nicerl3-lc` becomes `nicerl3_lc`
+<div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
+Note that, similar to <code>nicerl3_spect</code>, the <b>-</b> symbol in the name is replace by <b>_</b> when calling the equivalent python name, so that <code>nicerl3-lc</code> becomes <code>nicerl3_lc</code>.
+</div>
 
 
 Note that no background light curve is estimated
@@ -158,7 +202,7 @@ inPars = {
 }
 
 # run the light curve task
-out = hsp.nicerl3_lc(inPars)
+out = nicer.nicerl3_lc(inPars)
 
 # check the task runs correctly
 if out.returncode == 0: 
@@ -170,9 +214,9 @@ else:
         fp.write('\n'.join(out.output))
 ```
 
-# Analysis
+## 7. Analysis
 
-## 1. Spectral Analysis
+### 7.1 Spectral Analysis
 Here, we will show an example of how the spectra we just extract can be analyzed using `pyxspec`.
 
 The spectra is loaded and fitted with a broken power-law model.
@@ -220,7 +264,7 @@ plt.errorbar(en, cr, xerr=enwid, yerr=crerr, fmt='k.', alpha=0.2)
 plt.plot(en, mop,'r-')
 ```
 
-## 2. Plot the Light Curve
+### 7.2 Plot the Light Curve
 Next, we going to read the light curve we just generated.
 
 Different Good Time Intervals (GTI) are plotted separately.

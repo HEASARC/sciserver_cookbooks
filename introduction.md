@@ -1,17 +1,16 @@
 
-### Welcome To The HEASARC Sciserver Tutorials
+# HEASARC Sciserver Tutorials
 
 Sciserver is a science platform where you get access to both data and analysis software in the same place. No need to download the data nor install the software.
 
 The following notebook tutorials provide some examples of how to use the software already installed on sciserver and accecss the data from the browser. 
 
-<div style='color: #666; background: #eee; padding:10px'>
+<div style='color: #666; background: #eee; padding:20px'>
 Please make sure the HEASARC data drive is mounted when initializing the sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
 <p>Also, make sure to run the notebooks using the (heasoft) kernel</p>
 </div>
 
 ---
-
 
 
 &#9672; [Getting Started](Getting-Started.ipynb): A quick guide on accessing the data and using [heasoftpy](https://github.com/HEASARC/heasoftpy) for analysis.

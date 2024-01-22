@@ -5,27 +5,68 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.15.2
+      jupytext_version: 1.16.0
   kernelspec:
     display_name: (heasoft)
     language: python
     name: heasoft
 ---
 
+# A Demo for Using jdaviz on Sciserver
+<hr style="border: 2px solid #fadbac" />
+
+- **Description:** A demo for using jdaviz for creating region files from an image during data analysis.
+- **Level:** Beginner.
+- **Data:** NuSTAR observation of **3C 382** (ObsID 60001084002).
+- **Requirements:** `heasoftpy`, `jdaviz`, `astropy`
+- **Credit:** Kavitha Arur (Jun 2023).
+- **Support:** Contact the [HEASARC helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
+- **Last verified to run:** 02/01/2024.
+
+<hr style="border: 2px solid #fadbac" />
+
 <!-- #region -->
-## An Demo for using jdaviz on Sciserver
+## 1. Introduction
 
 [jdaviz](https://jdaviz.readthedocs.io/en/latest/) is a package of astronomical data analysis visualization tools based on the Jupyter platform. These GUI-based tools link data visualization and interactive analysis.
 
 
 `jdaviz` includes several tools. Here, we will focus on using `Imviz`, which is a tool for visualization and quick-look analysis for 2D astronomical images, so it can be used to analyze images, create and modify regions files such as those needed in many X-ray analysis pipelines.
 
-We will walk through the simple steps of using `Imviz` on sciserver. For more details on using the tool, please refer to the main [jdaviz site](https://jdaviz.readthedocs.io/en/latest/).
+We will walk through the simple steps of using `Imviz` on Sciserver. For more details on using the tool, please refer to the main [jdaviz site](https://jdaviz.readthedocs.io/en/latest/).
+
+<div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
+<b>Running On Sciserver:</b><br>
+When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
+<br>
+Also, this notebook requires <code>heasoftpy</code> and <code>jdaviz</code>, which are available in the (heasoft) conda environment. You should see (heasoft) at the top right of the notebook. If not, click there and select it.
+
+<b>Running Outside Sciserver:</b><br>
+If running outside Sciserver, some changes will be needed, including:<br>
+&bull; Make sure heasoftpy and heasoft are installed (<a herf='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
+&bull; Unlike on Sciserver, where the data is available locally, you will need to download the data to your machine.<br>
+</div>
 
 
----
 
 <!-- #endregion -->
+
+## 2. Module Imports
+We need the following python modules:
+
+```python
+# import heasoftpy to use for image extraction
+import heasoftpy as hsp
+
+# Imviz for working with the images
+from jdaviz import Imviz
+
+# WCS is need to handle image coordinates
+from astropy.wcs import WCS
+
+```
+
+## 3. Image Extraction
 
 Say we are analyzing NuSTAR data of some point source and we want to extract the spectra. We typically need to either pass the source and background selection as RA and DEC positions along with selection region information such as the radius, or we can create the region files for the source and backgorund and pass those to the extraction pipeline. In this example, we will use the latter.
 
@@ -34,16 +75,6 @@ For the purpose of this example, we will copy the cleaned event file for the FMP
 Using [`xamin`](https://heasarc.gsfc.nasa.gov/xamin/) to search for NuSTAR observations of `3C 382`, we find that the data for this obsid is located in: `/FTP/nustar/data/obs/00/6//60001084002/`.
 
 First, we use the `extractor` tool from `heasoftpy` to extract an image from the event file
-
-```python
-# import heasoftpy to use for image extraction
-import heasoftpy as hsp
-
-# Imviz for working with the images
-from jdaviz import Imviz
-from astropy.wcs import WCS
-%matplotlib inline
-```
 
 ```python
 evt_file = '/FTP/nustar/data/obs/00/6//60001084002/event_cl/nu60001084002A01_cl.evt.gz'
@@ -55,12 +86,15 @@ inPars = {
     'phafile'   : 'NONE',
     'xcolf'     : 'X',
     'ycolf'     : 'Y',
+    # noprompt is set so the tool does not prompt for additional parameters
     'noprompt'  : True
 }
 
 # run the task
 res = hsp.extractor(**inPars)
 ```
+
+## 4. Create Source and Background Regions
 
 After the image is extracted, we use `Imviz` to load the image, so we can create the region files.
 
@@ -102,6 +136,8 @@ regions = imviz.get_interactive_regions()
 print(regions)
 ```
 
+### 4.1 Save the Regions in Image Units
+
 ```python
 # The following write region files in image units
 regions['Subset 1'].write('source.reg', format='ds9', overwrite=True)
@@ -111,6 +147,8 @@ regions['Subset 2'].write('background.reg', format='ds9', overwrite=True)
 !cat source.reg
 !cat background.reg
 ```
+
+### 4.2 Save the Regions in WCS Coordinates
 
 ```python
 # To save the image files in WCS coordinates, we can use WCS from astropy
