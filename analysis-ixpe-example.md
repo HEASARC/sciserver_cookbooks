@@ -206,11 +206,15 @@ For the Q and U spectra, you will need to include the RMF and MRF (Modulation Re
 
 The location of the calibration files can be obtained through the `hsp.quzcif` tool. Type in `hsp.quzcif?` to get more information on this function. 
 
-Note that the output of the `hsp.quzcif` gives the path to more than one file. This is because there are 3 sets of response files, corresponding to the different weighting schemes. 
+Note that the output of the `hsp.quzcif` gives the path to more than one file. This is because there are 3 sets of response files, corresponding to the different weighting schemes.
 
-- For the 'NEFF' weighting, use 'alpha07_02'.
-- For the 'SIMPLE' weighting, use 'alpha075simple_02'. 
-- For the 'UNWEIGHTED' version, use '20170101_02'.
+- For the 'NEFF' weighting, use 'alpha07_`vv`'.
+- For the 'SIMPLE' weighting, use 'alpha075simple_`vv`'.
+- For the 'UNWEIGHTED' version, use '20170101_`vv`'.
+
+Where `vv` is the version number of the response files. The use of the latest version of the files is recommended.
+
+In following, we use `vv = 02` for the RMF and `vv = 03` for the ARF and MRF.
 
 ```python
 # hsp.quzcif?
@@ -238,30 +242,30 @@ rmf3 = [x.split()[0] for x in res.output if 'alpha075_02'  in x][0]
 # get the on-axis arf
 res = hsp.quzcif(mission='ixpe', instrument='gpd',detector='DU1',
              filter='-', date='-', time='-',expr='-',codename='SPECRESP')
-arf1 = [x.split()[0] for x in res.output if 'alpha075_02'  in x][0]
+arf1 = [x.split()[0] for x in res.output if 'alpha075_03'  in x][0]
 
 res = hsp.quzcif(mission='ixpe', instrument='gpd',detector='DU2',
              filter='-', date='-', time='-',expr='-',codename='SPECRESP')
-arf2 = [x.split()[0] for x in res.output if 'alpha075_02'  in x][0]
+arf2 = [x.split()[0] for x in res.output if 'alpha075_03'  in x][0]
 
 res = hsp.quzcif(mission='ixpe', instrument='gpd',detector='DU3',
              filter='-', date='-', time='-',expr='-',codename='SPECRESP')
-arf3 = [x.split()[0] for x in res.output if 'alpha075_02'  in x][0]
+arf3 = [x.split()[0] for x in res.output if 'alpha075_03'  in x][0]
 ```
 
 ```python
 # get the on-axis mrf
 res = hsp.quzcif(mission='ixpe', instrument='gpd',detector='DU1',
              filter='-', date='-', time='-',expr='-',codename='MODSPECRESP')
-mrf1 = [x.split()[0] for x in res.output if 'alpha075_02'  in x][0]
+mrf1 = [x.split()[0] for x in res.output if 'alpha075_03'  in x][0]
 
 res = hsp.quzcif(mission='ixpe', instrument='gpd',detector='DU2',
              filter='-', date='-', time='-',expr='-',codename='MODSPECRESP')
-mrf2 = [x.split()[0] for x in res.output if 'alpha075_02'  in x][0]
+mrf2 = [x.split()[0] for x in res.output if 'alpha075_03'  in x][0]
 
 res = hsp.quzcif(mission='ixpe', instrument='gpd',detector='DU3',
              filter='-', date='-', time='-',expr='-',codename='MODSPECRESP')
-mrf3 = [x.split()[0] for x in res.output if 'alpha075_02'  in x][0]
+mrf3 = [x.split()[0] for x in res.output if 'alpha075_03'  in x][0]
 ```
 
 
@@ -379,7 +383,7 @@ xspec.Plot.area=True
 xspec.Plot.xAxis='keV'
 xspec.Plot('polangle')
 yVals=xspec.Plot.y()
-yErr = xspec.Plot.yErr()
+yErr = [abs(y) for y in xspec.Plot.yErr()]
 xVals = xspec.Plot.x()
 xErr = xspec.Plot.xErr()
 mop = xspec.Plot.model()
