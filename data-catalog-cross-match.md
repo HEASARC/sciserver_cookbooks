@@ -12,7 +12,7 @@ jupyter:
     name: heasoft
 ---
 
-# Searching a Large Catalog With a List of Sources
+# Query a List of Sources in a Large Catalog
 <hr style="border: 2px solid #fadbac" />
 
 - **Description:** An example of cross-matching a list of sources to data in the archive.
@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** [`pyvo`, `astropy`]".
 - **Credit:** Tess Jaffe (May 2023).
 - **Support:** Contact the [HEASARC helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
-- **Last verified to run:** 01/26/2024.
+- **Last verified to run:** 02/28/2024.
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -37,7 +37,7 @@ This tutorial is a HEASARC-specific example of a more general workflow querying 
 
 <div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
 <b>Running On Sciserver:</b><br>
-The notebook requires `pyvo`, and on Sciserver, it is available on the `heasoft` conda kernel. Make sure you run the notbeook using that kernel by selecting it in the top right.
+The notebook requires <code>pyvo</code>, and on Sciserver, it is available on the <code>heasoft</code> conda kernel. Make sure you run the notbeook using that kernel by selecting it in the top right.
 </div>
 
 
@@ -79,7 +79,7 @@ heasarc.describe()
 
 To include our list of source with the query, VO protocols use the `VOTable`, which is both powerful and complicated.  But `astropy` has easy tools to handle it. 
 
-As we will show, when submitting that query that includes table data (the list of source coordinates in our case), these can be passed to `pyvo` as either an `astropy` table, or as a file name of the VO table in XML format.
+As we will show, when submitting a query that includes table data (the list of source coordinates in our case), these can be passed to `pyvo` as either an `astropy` table, or as a file name of the VO table in XML format.
 
 
 Typically, you may start from a list of sources you want to query. In this tutorial, we first create this list in comma-separated value (CSV) format to be used as our input. The file `source_list.csv` contains a list of 10000 RA and DEC values.

@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** `heasoftpy`, `xspec`, `matplotlib`
 - **Credit:** Kavitha Arur (Jun 2023).
 - **Support:** Contact the [IXPE Guest Observer Facility (GOF)](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=ixpe) or the [HEASARC helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
-- **Last verified to run:** 01/26/2024.
+- **Last verified to run:** 02/28/2024.
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -40,7 +40,7 @@ Also, this notebook requires <code>heasoftpy</code>, which is available in the (
 
 <b>Running Outside Sciserver:</b><br>
 If running outside Sciserver, some changes will be needed, including:<br>
-&bull; Make sure heasoftpy and heasoft are installed (<a herf='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
+&bull; Make sure heasoftpy and heasoft are installed (<a href='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
 &bull; Unlike on Sciserver, where the data is available locally, you will need to download the data to your machine.<br>
 </div>
 

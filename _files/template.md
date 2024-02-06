@@ -13,7 +13,7 @@ jupyter:
 ---
 
 # Descriptive Title of the Content of the Notebook
----
+<hr style="border: 2px solid #fadbac" />
 Header Section: include the following information.
 
 - **Description:** A template on how to write a notebook tutorial on sciserver.
@@ -24,7 +24,7 @@ Header Section: include the following information.
 - **Support:** How to get help.
 - **Last verified to run:** (00/00/000) When was this last tested.
 
----
+<hr style="border: 2px solid #fadbac" />
 
 
 ## 1. Introduction
@@ -45,7 +45,7 @@ When running this notebook inside Sciserver, make sure the HEASARC data drive is
 <b>Running Outside Sciserver:</b><br>
 This notebook runs in the heasoftpy conda environment on Sciserver.
 If running outside Sciserver, some changes will be needed, including:<br>
-&bull; Make sure heasoftpy and heasoft are correctly installed (<a herf='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
+&bull; Make sure heasoftpy and heasoft are correctly installed (<a href='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
 &bull; Unlike on Sciserver, where the data is available locally, you will need to download the data to your machine.<br>
 </div>
 

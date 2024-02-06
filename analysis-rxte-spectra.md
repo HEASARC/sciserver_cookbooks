@@ -18,7 +18,7 @@ jupyter:
 - **Description:** Finding standard spectral products from RXTE.
 - **Level:** Intermediate.
 - **Data:** RXTE observations of **eta car** taken over 16 years.
-- **Requirements:** `heasoftpy`, `pyvo`, `matplotlib`, `pyxspec`
+- **Requirements:** `pyvo`, `matplotlib`, `pyxspec`
 - **Credit:** Tess Jaffe (Sep 2021).
 - **Support:** Contact the [HEASARC helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
 - **Last verified to run:** 01/26/2024.
@@ -37,11 +37,10 @@ We first find all of the standard spectra, then use `pyxspec` to do some basic a
 <b>Running On Sciserver:</b><br>
 When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
 <br>
-Also, this notebook requires <code>heasoftpy</code>, which is available in the (heasoft) conda environment. You should see (heasoft) at the top right of the notebook. If not, click there and select it.
 
 <b>Running Outside Sciserver:</b><br>
 If running outside Sciserver, some changes will be needed, including:<br>
-&bull; Make sure heasoftpy and heasoft are installed (<a herf='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
+&bull; Make sure <code>pyxspec</code> and heasoft are installed (<a href='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
 &bull; Unlike on Sciserver, where the data is available locally, you will need to download the data to your machine.<br>
 </div>
 

@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** `heasoftpy`, `numpy`, `matplotlib`
 - **Credit:** Abdu Zoghbi (Jan 2023).
 - **Support:** Contact the [HEASARC helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
-- **Last verified to run:** 01/26/2024.
+- **Last verified to run:** 02/28/2024.
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -42,7 +42,7 @@ Also, this notebook requires <code>heasoftpy</code>, which is available in the (
 
 <b>Running Outside Sciserver:</b><br>
 If running outside Sciserver, some changes will be needed, including:<br>
-&bull; Make sure heasoftpy and heasoft are installed (<a herf='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
+&bull; Make sure heasoftpy and heasoft are installed (<a href='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
 &bull; Unlike on Sciserver, where the data is available locally, you will need to download the data to your machine.<br>
 </div>
 
@@ -51,7 +51,7 @@ If running outside Sciserver, some changes will be needed, including:<br>
 We need the following python modules:
 
 <div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
-Note that for heasoftpy < 1.4, <code>nupipeline</code> is accessed via <code>heasoftpy.nupipeline</code>. For heasoftpy >= 1.4, it is available under a separate module called <code>nustar</code> that needs to be imported explicitly with <code>from heasoftpy import nustar</code>
+Note that for heasoftpy < 1.4, <code>nupipeline</code> is accessed via <code>heasoftpy.nupipeline</code>. For heasoftpy >= 1.4, it is available under a separate module called <code>nustar</code> that needs to be imported explicitly.
 </div>
 
 ```python
@@ -62,11 +62,14 @@ import matplotlib.pyplot as plt
 
 import heasoftpy as hsp
 
-from packaging import version
-if version.parse(hsp.__version__) < version.parse('1.4'):
-    nustar = hsp
-else:
-    from heasoftpy import nustar
+# import nupipeline from heasoftpy
+# for heasoftpy version >= 1.4, it is under heasoftpy.nustar.nupipeline
+# for heasoftpy version < 1.4, it is under heasoftpy.nupipeline
+try:
+    from heasoftpy.nustar import nupipeline
+except ModuleNotFoundError:
+    from heasoftpy import nupipeline
+
 ```
 
 ## 3. Run the Reprocessing Pipeline
@@ -107,7 +110,7 @@ outdir = obsid + '_p/event_cl'
 stem   = 'nu' + obsid
 
 # call the tasks
-out = nustar.nupipeline(indir=indir, outdir=outdir, steminputs=stem, instrument='FPMA',
+out = nupipeline(indir=indir, outdir=outdir, steminputs=stem, instrument='FPMA',
                         clobber='yes', noprompt=True, verbose=True)
 ```
 

@@ -12,7 +12,7 @@ jupyter:
     name: heasoft
 ---
 
-# HEASARC data access on SciServer
+# HEASARC Data Access on SciServer
 <hr style="border: 2px solid #fadbac" />
 
 - **Description:** A general overview on accessing data on Sciserver.
@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** `pyvo`.
 - **Credit:** Tess Jaffe (Sep 2021).
 - **Support:** Contact the [HEASARC helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
-- **Last verified to run:** 01/26/2024.
+- **Last verified to run:** 02/28/2024.
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -30,14 +30,14 @@ jupyter:
 ## 1. Introduction
 This notebook presents a tutorial of how to access HEASARC data using the virtual observatory (VO) python client `pyvo`.
 
-We handle the general case of using the Tabel Access Protocol (TAP) to query any information about the HEASARC tables. A more specific data access tutorial when the table is known is give in the [Finding and Downloading Data notebook](data-find-download.md).
+We handle the general case of using the Tabel Access Protocol (TAP) to query any information about the HEASARC tables. A more specific data access tutorial when the table is known, is given in the [notebook on Finding and Downloading Data](data-find-download.md).
 
 The case will be illustrated by querying for XTE observations of **Eta Car** .
 
 
 <div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
 <b>Running On Sciserver:</b><br>
-The notebook requires `pyvo`, and on Sciserver, it is available on the `heasoft` conda kernel. Make sure you run the notbeook using that kernel by selecting it in the top right.
+The notebook requires <code>pyvo</code>, and on Sciserver, it is available on the <code>heasoft</code> conda kernel. Make sure you run the notbeook using that kernel by selecting it in the top right.
 </div>
 
 <!-- #endregion -->
@@ -66,7 +66,7 @@ We start with the Registry of all VO services.  The HEASARC table service is usi
 
 
 ```python
-tap_services = pyvo.regsearch(servicetype='tap',keywords=['heasarc'])
+tap_services = pyvo.regsearch(servicetype='tap', keywords=['heasarc'])
 ```
 
 We then ask the service for all of the tables that are available at the HEASARC:
@@ -86,7 +86,7 @@ for tablename in heasarc_tables.keys():
 
 The `xtemaster` catalog is the one that we're interested in.  
 
-Let's see what this table has in it.  Alternatively, we can google it and find the same information here:
+Let's see what this table has in it.  The same information is availabe in the table description in the website:
 
 https://heasarc.gsfc.nasa.gov/W3Browse/all/xtemaster.html
 

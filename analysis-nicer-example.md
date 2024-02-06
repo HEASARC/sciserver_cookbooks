@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** `heasoftpy`, `xspec`, `astropy`, `matplotlib`
 - **Credit:** Mike Corcoran / Abdu Zoghbi (May 2022).
 - **Support:** Contact the [HEASARC helpdesk or NICER Guest Observer Facility (GOF)](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
-- **Last verified to run:** 01/26/2024.
+- **Last verified to run:** 02/28/2024.
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -43,7 +43,7 @@ Heasoft higher than v6.31 is required in order to be able to run <code>nicerl3</
 
 <b>Running Outside Sciserver:</b><br>
 If running outside Sciserver, some changes will be needed, including:<br>
-&bull; Make sure heasoftpy and heasoft (higher than v6.31) are installed (<a herf='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
+&bull; Make sure heasoftpy and heasoft (higher than v6.31) are installed (<a href='https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/'>Download and Install heasoft</a>).<br>
 &bull; Unlike on Sciserver, where the data is available locally, you will need to download the data to your machine.<br>
 </div>
 <!-- #endregion -->
@@ -52,7 +52,7 @@ If running outside Sciserver, some changes will be needed, including:<br>
 We need the following python modules:
 
 <div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
-Note that for heasoftpy < 1.4, <code>nicerl2</code> is accessed via <code>heasoftpy.nicerl2</code>. For heasoftpy >= 1.4, it is available under a separate module called <code>nicer</code> that needs to be imported explicitly with <code>from heasoftpy import nicer</code>
+Note that for heasoftpy < 1.4, <code>nicerl2</code> is accessed via <code>heasoftpy.nicerl2</code>. For heasoftpy >= 1.4, it is available under a separate module called <code>nicer</code> that needs to be imported explicitly.
 </div>
 
 ```python
@@ -67,11 +67,13 @@ import matplotlib.pylab as plt
 import heasoftpy as hsp
 import xspec as xs
 
-from packaging import version
-if version.parse(hsp.__version__) < version.parse('1.4'):
-    nicer = hsp
-else:
-    from heasoftpy import nicer
+# import nicer tools from heasoftpy
+# for heasoftpy version >= 1.4, they are under heasoftpy.nicer.*
+# for heasoftpy version < 1.4, they are under heasoftpy.*
+try:
+    from heasoftpy.nicer import nicerl2, nicerl3_lc, nicerl3_spect
+except (ModuleNotFoundError, ImportError):
+    from heasoftpy import nicerl2, nicerl3_lc, nicerl3_spect
 ```
 
 ## 3. Set up the NICER obsid directory
@@ -108,7 +110,7 @@ inPars = {
 }
 
 # run the task
-out = nicer.nicerl2(inPars)
+out = nicerl2(inPars)
 
 # check that everything run correctly
 if out.returncode == 0: 
@@ -160,7 +162,7 @@ inPars = {
 }
 
 # run the spectral extraction task
-out = nicer.nicerl3_spect(inPars)
+out = nicerl3_spect(inPars)
 
 # check that the task run correctly
 if out.returncode == 0: 
@@ -202,7 +204,7 @@ inPars = {
 }
 
 # run the light curve task
-out = nicer.nicerl3_lc(inPars)
+out = nicerl3_lc(inPars)
 
 # check the task runs correctly
 if out.returncode == 0: 

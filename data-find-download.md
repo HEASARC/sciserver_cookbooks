@@ -12,7 +12,7 @@ jupyter:
     name: heasoft
 ---
 
-# Finding and Downloading Data From a Source Using Python
+# Finding and Downloading Data For an Object Using Python
 <hr style="border: 2px solid #fadbac" />
 
 - **Description:** Tutorial on how to access HEASARC data using the Virtual Observatory client `pyvo`.
@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** `pyvo`.
 - **Credit:** Abdu Zoghbi (May 2022).
 - **Support:** Contact the [HEASARC helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
-- **Last verified to run:** 01/26/2024
+- **Last verified to run:** 02/28/2024
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -39,7 +39,7 @@ This notebook searches the NuSTAR master catalog `numaster` using pyvo. We speci
 
 <div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
 <b>Running On Sciserver:</b><br>
-The notebook requires `pyvo`, and on Sciserver, it is available on the `heasoft` conda kernel. Make sure you run the notbeook using that kernel by selecting it in the top right.
+The notebook requires <code>pyvo</code>, and on Sciserver, it is available on the <code>heasoft</code> conda kernel. Make sure you run the notbeook using that kernel by selecting it in the top right.
 </div>
 
 <!-- #endregion -->
@@ -61,6 +61,8 @@ from astropy.coordinates import SkyCoord
 
 ## 3. Finding and Downloading the data
 This part assumes we know the ID of the VO service. Generally these are of the form: `ivo://nasa.heasarc/{table_name}`.
+
+If you don't know the name of the table, you can search the VO registry, as illustrated in the [data access notebook](data-access.md).
 
 ### 3.1 The Search Serivce
 First, we create a cone search service:
