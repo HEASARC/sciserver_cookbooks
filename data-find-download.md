@@ -17,7 +17,7 @@ jupyter:
 
 - **Description:** Tutorial on how to access HEASARC data using the Virtual Observatory client `pyvo`.
 - **Level:** Intermediate
-- **Data:** Find and download NuSTAR observations of the AGN NGC 4151
+- **Data:** Find and download NuSTAR observations of the AGN **3C 105**
 - **Requirements:** `pyvo`.
 - **Credit:** Abdu Zoghbi (May 2022).
 - **Support:** Contact the [HEASARC helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback).
@@ -32,10 +32,10 @@ This notebook presents a tutorial of how to access HEASARC data using the virtua
 
 We handle the case of a user searching for data on a specific astronomical object from a *specific* high energy table. For a more general data access tutorial, see the [data access notebook](data-access.md).
 
-We will be find all NuSTAR observations of **NGC 4151** that have an exposure of more than 50 ks.
+We will find all NuSTAR observations of **3C 105** that have an exposure of less than 10 ks.
 
 
-This notebook searches the NuSTAR master catalog `numaster` using pyvo. We specifically use the `conesearch` service, which the VO service that allows for searching around a position in the sky (NGC 4151  in this case).
+This notebook searches the NuSTAR master catalog `numaster` using pyvo. We specifically use the `conesearch` service, which the VO service that allows for searching around a position in the sky (3C 105  in this case).
 
 <div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
 <b>Running On Sciserver:</b><br>
@@ -85,7 +85,7 @@ The search result is then printed as an astropy Table for a clean display.
 
 ```python
 # Find the coordinates of the source
-pos = SkyCoord.from_name('ngc 4151')
+pos = SkyCoord.from_name('3c 105')
 
 search_result = cs_service.search(pos)
 
@@ -97,12 +97,12 @@ search_result.to_table()
 
 The search returned several entries.
 
-Let's say we are interested only in observations with exposures larger than 50 ks. We do that with a loop over the search results.
+Let's say we are interested only in observations with exposures smaller than 10 ks. We do that with a loop over the search results.
 
 
 
 ```python
-obs_to_explore = [res for res in search_result if res['exposure_a'] >= 50000]
+obs_to_explore = [res for res in search_result if res['exposure_a'] <= 10000]
 obs_to_explore
 ```
 
