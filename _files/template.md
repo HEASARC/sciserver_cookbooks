@@ -7,9 +7,9 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.16.0
   kernelspec:
-    display_name: Python 3 (ipykernel)
+    display_name: (heasoft)
     language: python
-    name: python3
+    name: conda-env-heasoft-py
 ---
 
 # Descriptive Title of the Content of the Notebook

@@ -1,3 +1,16 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.16.0
+  kernelspec:
+    display_name: (heasoft)
+    language: python
+    name: conda-env-heasoft-py
+---
 
 # HEASARC Sciserver Tutorials
 <hr style="border: 2px solid #fadbac" />

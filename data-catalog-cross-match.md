@@ -9,7 +9,7 @@ jupyter:
   kernelspec:
     display_name: (heasoft)
     language: python
-    name: heasoft
+    name: conda-env-heasoft-py
 ---
 
 # Query a List of Sources in a Large Catalog

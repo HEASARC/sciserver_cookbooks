@@ -9,7 +9,7 @@ jupyter:
   kernelspec:
     display_name: (heasoft)
     language: python
-    name: heasoft
+    name: conda-env-heasoft-py
 ---
 
 # RXTE Spectral Analysis with Minimal Machine Learning
