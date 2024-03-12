@@ -6,7 +6,7 @@ do
         continue
     fi 
     nbroot=$(echo "${nb}" | cut -d. -f1)
-    echo "================\nProcessing ${nbroot}"
+    printf "================\nProcessing ${nbroot}\n"
     date
     if [ ! -d "${nbroot}.out" ]; then
         mkdir "${nbroot}.out"
