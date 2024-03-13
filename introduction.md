@@ -20,8 +20,12 @@ Sciserver is a science platform where you get access to both data and analysis s
 The following notebook tutorials provide some examples of how to use the software already installed on sciserver and accecss the data from the browser. 
 
 <div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
-Please make sure the HEASARC data drive is mounted when initializing the sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
-<p>Also, make sure to run the notebooks using the (heasoft) kernel, unless indicated otherwise</p>
+&#9672; Please make sure the HEASARC data drive is mounted when initializing the sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
+
+<p>
+&#9672; Note also that files under <code>/home/idies/workspace/sciserver_cookbooks</code> are <b style='color:red'>not saved</b> if you close the Sciserver session. If you want data or notebook modifications to be saved, you can copy them into the persistent storage area: <code>/home/idies/workspace/Storage/{user}/persistent</code>.
+</p>
+
 </div>
 
 ---
