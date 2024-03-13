@@ -147,11 +147,11 @@ nspec = 500
 
 # The spectra will be saved in a list
 spectra = []
-for file in filenames[:nspec]:
+for file in tqdm(filenames[:nspec]):
     # clear out any previously loaded dataset
     xspec.AllData.clear()
     # move to the folder containing the spectrum before loading it
-    os.chdir(os.dirname(file))
+    os.chdir(os.path.dirname(file))
     spec = xspec.Spectrum(file)
     os.chdir(cwd)
 

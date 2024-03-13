@@ -7,9 +7,9 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.16.0
   kernelspec:
-    display_name: (heasoft)
+    display_name: (root) *
     language: python
-    name: conda-env-heasoft-py
+    name: conda-root-py
 ---
 
 # A Demo for Using WWT on Sciserver
@@ -35,7 +35,7 @@ We will first launch the app, center it on the **Crab**, then search for Chandra
 For more about how to use the latter, see the [Getting Started](getting-started.md), [Data Access](data-access.md) and  [Finding and Downloading Data](data-find-download.md) tutorials.
 
 <div style='color: #333; background: #ffffdf; padding:20px; border: 4px solid #fadbac'>
-This notebook requires the <code>pywwt</code>. One Sciserver, it is available in the <code>heasoft</code> conda environment . You should see (heasoft) at the top right of the notebook. If not, click there and select it.
+This notebook requires the <code>pywwt</code>. One Sciserver, it is available in the <code>root</code> conda environment . You should see (heasoft) at the top right of the notebook. If not, click there and select it.
 <br>
 If running outside sciserver, follow <a href='https://pywwt.readthedocs.io/en/stable/installation.html'>these installation instructions</a>.
 </div>
@@ -58,6 +58,7 @@ First, import the required modules, then launch the app.
 <!-- #endregion -->
 
 ```python
+import numpy as np
 from astropy.io import fits
 from astropy.utils.data import download_file
 from astropy import units as u
@@ -155,6 +156,6 @@ cutout.plot_on_original(color='white')
 So now let's add it to the viewing widget on top of the background Halpha emission:
 
 ```python
-layer2 = wwt.layers.add_image_layer(image=(cutout.data,cutout.wcs))
+layer2 = wwt.layers.add_image_layer(image=(np.ascontiguousarray(cutout.data),cutout.wcs))
 layer2.opacity = 0.5
 ```

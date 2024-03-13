@@ -66,7 +66,7 @@ except ModuleNotFoundError:
 ## 3. Finding and Exploring the data
 
 The Heasarc data holdings can be searched and explored in different ways:
-- Using [Xamin Web Interface](https://heasarc.gsfc.nasa.gov/xamin/xamin.jsp).
+- Using [Xamin Web Interface](https://heasarc.gsfc.nasa.gov/xamin).
 
 - Using a virtual observatory (VO) client such as [pyVO](https://github.com/astropy/pyvo) (see below) or [Topcat](http://www.star.bris.ac.uk/~mbt/topcat/).
 
