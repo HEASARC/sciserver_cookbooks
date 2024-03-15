@@ -22,9 +22,7 @@ do
         continue
     fi
     cp "../${nb}" . || (echo "Cannot find ../${nb}; exiting" ; exit 1)
-    # There's probably a way to combine these?
-    jupytext --to notebook "${nb}" "${nbroot}.ipynb" > output.log 2>&1 || (echo "ERROR:  Exit Code: $?" ; tail output.log ; touch 00_failure; exit 1)
-    jupyter nbconvert --to notebook --execute "${nbroot}.ipynb"  >> output.log 2>&1 || (echo "ERROR:  Exit Code: $?" ; tail output.log ; touch 00_failure ; exit 1)
+    jupytext --execute --to notebook "${nb}" "${nbroot}.ipynb" > output.log 2>&1 || (echo "ERROR:  Exit Code: $?" ; tail output.log ; touch 00_failure; exit 1)
     touch 00_success
     cd ..
 done
