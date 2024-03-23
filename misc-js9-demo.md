@@ -9,7 +9,7 @@ jupyter:
   kernelspec:
     display_name: (heasoft)
     language: python
-    name: heasoft
+    name: conda-env-heasoft-py
 ---
 
 # A Demo for Using Jupyter-JS9 on Sciserver
@@ -115,7 +115,7 @@ JS9 supports the same mouse-drag control for contrast and bias as in DS9. Using 
 
 You can also enter a specific, numerical value within the `Color` Menu. In this same menu, you can select a different colormap for your image:
 
-![js9-colormap](_files/_files/js9-colormap.png)
+![js9-colormap](_files/js9-colormap.png)
 
 and lastly, via the Python helper, you can retrieve all three color parameters (colormap, contrast, and bias) via the `GetColormap` method:
 
