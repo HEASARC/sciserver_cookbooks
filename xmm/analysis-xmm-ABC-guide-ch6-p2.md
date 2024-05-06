@@ -18,7 +18,7 @@ jupyter:
 - **Description:** XMM-Newton ABC Guide, Chapter 6, Part 2.
 - **Level:** Beginner
 - **Data:** XMM observation of the Lockman Hole (obsid=0123700101)
-- **Requirements:** Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.33.1` image.  Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
 - **Last verified to run:** 1 May 2024, for SAS v21
@@ -27,7 +27,7 @@ jupyter:
 
 
 ## Introduction
-This tutorial is based on Chapter 6 from the The XMM-Newton ABC Guide prepared by the NASA/GSFC XMM-Newton Guest Observer Facility. This notebook assumes you are at least minimally familiar with pySAS on SciServer (see the [Long pySAS Introduction](./xmm-pysas-intro-long.ipynb "Long pySAS Intro")). 
+This tutorial is based on Chapter 6 from the The XMM-Newton ABC Guide prepared by the NASA/GSFC XMM-Newton Guest Observer Facility. This notebook assumes you are at least minimally familiar with pySAS on SciServer (see the [Long pySAS Introduction](./analysis-xmm-long-intro.md "Long pySAS Intro")). 
 
 #### SAS Tasks to be Used
 
@@ -69,7 +69,6 @@ from pysas.wrapper import Wrapper as w
 
 # Importing Js9
 import jpyjs9
-my_js9 = jpyjs9.JS9(width = 800, height = 800, side=True)
 
 # Useful imports
 import os, subprocess
@@ -87,7 +86,11 @@ Now we need to let pySAS know which Obs ID we are working with. If you have alre
 
 ```python
 obsid = '0123700101'
-usr = os.listdir('/home/idies/workspace/Temporary/')[0]
+
+# To get your user name. Or you can just put your user name in the path for your data.
+from SciServer import Authentication as auth
+usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
+
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 odf = pysas.odfcontrol.ODFobject(obsid)
 odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
@@ -164,7 +167,11 @@ w('evselect', inargs).run()
 ## 6.6 Regions in JS9
 <!-- #endregion -->
 
-As in Part 1, we will use a function to create a FITS image file from the filtered event list and open it in JS9.
+As in Part 1, we will use a function to create a FITS image file from the filtered event list and open it in JS9. Let us open a JS9 window again.
+
+```python
+my_js9 = jpyjs9.JS9(width = 800, height = 800, side=True)
+```
 
 ```python
 def make_fits_image(event_list_file, image_file='image.fits'):

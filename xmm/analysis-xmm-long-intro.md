@@ -18,7 +18,7 @@ jupyter:
 - **Description:** A longer introduction to pySAS on sciserver.
 - **Level:** Beginner
 - **Data:** XMM observation of NGC 3079 (obsid=0802710101)
-- **Requirements:** Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.33.1` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
 - **Last verified to run:** 1 May 2024, for SAS v21
@@ -28,7 +28,7 @@ jupyter:
 
 ## 1. Introduction
 
-This tutorial provides a much more detailed explanation on how to use pySAS than the one found in the [Short pySAS Introduction](./xmm-pysas-intro-short.ipynb "Short pySAS Intro"), but like the Short Intro it only covers how to download observation data files, how to calibrate the data, and how to run any SAS task through pySAS. For explanations on how to use different SAS tasks inside of pySAS see the exmple notebooks provided. A tutorial on how to learn to use SAS and pySAS for XMM analysis can be found in <a href="./xmm-ABC-guide-p1.ipynb">The XMM-Newton ABC Guide</a>.
+This tutorial provides a much more detailed explanation on how to use pySAS than the one found in the [Short pySAS Introduction](./analysis-xmm-short-intro.md "Short pySAS Intro"), but like the Short Intro it only covers how to download observation data files, how to calibrate the data, and how to run any SAS task through pySAS. For explanations on how to use different SAS tasks inside of pySAS see the exmple notebooks provided. A tutorial on how to learn to use SAS and pySAS for XMM analysis can be found in [The XMM-Newton ABC Guide](./analysis-xmm-ABC-guide-ch6-p1.md "XMM ABC Guide").
 
 #### SAS Tasks to be Used
 
@@ -44,6 +44,7 @@ This tutorial provides a much more detailed explanation on how to use pySAS than
 #### Useful Links
 
 - [`pysas` Documentation](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/pysas/index.html "pysas Documentation")
+- [`pysas` on GitHub](https://github.com/XMMGOF/pysas)
 - [Common SAS Threads](https://www.cosmos.esa.int/web/xmm-newton/sas-threads/index.html "SAS Threads")
 - [Users' Guide to the XMM-Newton Science Analysis System (SAS)](https://xmm-tools.cosmos.esa.int/external/xmm_user_support/documentation/sas_usg/USG/SASUSG.html "Users' Guide")
 - [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide")
@@ -73,7 +74,7 @@ Lets begin by asking three questions:
 
 For the first question, you will need an Observation ID. In this tutorial we use the ObsID `0802710101`. 
 
-For the second question, you will also have to choose a directory for your data (`data_dir`). You can set your data directory to any path you want, but for now we will use the current working directory.
+For the second question, you will also have to choose a directory for your data (`data_dir`). You can set your data directory to any path you want, but for now we will use your scratch space.
 
 For the third question, a working directory will automatically be created for each ObsID, as explained below. You can change this manually, but using the default is recommended.
 ___
@@ -81,7 +82,13 @@ ___
 ```python
 import os
 import pysas
-usr = os.listdir('/home/idies/workspace/Temporary/')[0]
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+# To get your user name. Or you can just put your user name in the path for your data.
+from SciServer import Authentication as auth
+usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
+
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 obsid = '0802710101'
 ```
@@ -90,14 +97,6 @@ By running the cell below, an Observation Data File (`odf`) object is created. B
 
 ```python
 odf = pysas.odfcontrol.ODFobject(obsid)
-```
-
-The `odf` object will also store some useful information for analysis. For example, it stores `data_dir`, `odf_dir`, and `work_dir`:
-
-```python
-print("Data directory: {0}".format(odf.data_dir))
-print("ODF  directory: {0}".format(odf.odf_dir))
-print("Work directory: {0}".format(odf.work_dir))
 ```
 
 ## 3. Run `odf.odfcompile`
@@ -126,6 +125,14 @@ Another important input is `overwrite=True/False`. If set to true, it will erase
  
 You can also choose the level of data products you download. If you set `level=ODF` then it will download the raw, uncalibrated data and recalibrate it. If you set `level=PPS` this will download previously calibrated data products that can be used directly for analisys.
 
+
+The `odf` object will also store some useful information for analysis. For example, it stores `data_dir`, `odf_dir`, and `work_dir`:
+
+```python
+print("Data directory: {0}".format(odf.data_dir))
+print("ODF  directory: {0}".format(odf.odf_dir))
+print("Work directory: {0}".format(odf.work_dir))
+```
 
 The location and name of important files are also stored in a Python dictionary in the odf object.
 
@@ -256,7 +263,7 @@ evselect table=unfiltered_event_list.fits withfilteredset=yes \
 The input arguments should be in a list, with each input argument a separate string. Note: Some inputs require single quotes to be preserved in the string. This can be done using double quotes to form the string. i.e. `"expression='(PATTERN <= 12)&&(PI in [200:4000])&&#XMMEA_EM'"`
 
 ```python
-unfiltered_event_list = odf.files['m1evt_list'][0]
+unfiltered_event_list = "3278_0802710101_EMOS1_S001_ImagingEvts.ds"
 
 inargs = ['table={0}'.format(unfiltered_event_list), 
           'withfilteredset=yes', 
@@ -284,8 +291,16 @@ Running `basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=Tr
     w('epproc',[]).run()
     w('emproc',[]).run()
     
-Using the function `odf.basic_setup` with <tt>rerun=False</tt> will check if `epproc` or `emproc` have already been run and will not overwrite existing output files. If <tt>rerun=True</tt> then previous output files will be ignored and overwritten.
-    
+Using the function `odf.basic_setup` with <tt>rerun=False</tt> will check if `epproc` or `emproc` have already been run and will not overwrite existing output files. If <tt>rerun=True</tt> then previous output files will be ignored and overwritten. After running `basic_setup` there will be more files listed in the `odf.files` dictionary.
+
+```python
+instrument_files = list(odf.files.keys())
+print(instrument_files,'\n')
+for instrument in instrument_files:
+    print(f'File Type: {instrument}')
+    print('>>> {0}'.format(odf.files[instrument]),'\n')
+```
+
 For more information see the function documentation.
 
 ```python

@@ -18,7 +18,7 @@ jupyter:
 - **Description:** XMM-Newton ABC Guide, Chapter 6, Part 1.
 - **Level:** Beginner
 - **Data:** XMM observation of the Lockman Hole (obsid=0123700101)
-- **Requirements:** Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.33.1` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
 - **Last verified to run:** 1 May 2024, for SAS v21
@@ -27,7 +27,7 @@ jupyter:
 
 
 ## Introduction
-This tutorial is based on Chapter 6 from the The XMM-Newton ABC Guide prepared by the NASA/GSFC XMM-Newton Guest Observer Facility. This notebook assumes you are at least minimally familiar with pySAS on SciServer (see the [Long pySAS Introduction](./xmm-pysas-intro-long.ipynb "Long pySAS Intro")). 
+This tutorial is based on Chapter 6 from the The XMM-Newton ABC Guide prepared by the NASA/GSFC XMM-Newton Guest Observer Facility. This notebook assumes you are at least minimally familiar with pySAS on SciServer (see the [Long pySAS Introduction](./analysis-xmm-long-intro.md "Long pySAS Intro")). 
 
 #### SAS Tasks to be Used
 
@@ -69,7 +69,6 @@ from pysas.wrapper import Wrapper as w
 
 # Importing Js9
 import jpyjs9
-my_js9 = jpyjs9.JS9(width = 800, height = 800, side=True)
 
 # Useful imports
 import os
@@ -89,7 +88,11 @@ plt.style.use(astropy_mpl_style)
 
 ```python
 obsid = '0123700101'
-usr = os.listdir('/home/idies/workspace/Temporary/')[0]
+
+# To get your user name. Or you can just put your user name in the path for your data.
+from SciServer import Authentication as auth
+usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
+
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 odf = pysas.odfcontrol.ODFobject(obsid)
 odf.basic_setup(data_dir=data_dir, overwrite=False, repo='sciserver',
@@ -121,6 +124,13 @@ By default, these tasks do not keep any intermediate files they generate. <tt>Em
 <!-- #endregion -->
 
 ## 6.2 Plot image
+
+
+For displaying images we are using a `ds9` clone, `JS9`. It has all the same functionality as `ds9` but it allows us to directly interface with it using Python code. The cell below  will display the `JS9` window to the side of this notebook.
+
+```python
+my_js9 = jpyjs9.JS9(width = 800, height = 800, side=True)
+```
 
 <!-- #region -->
 Below we define a useful function to make image plotting easier. It uses `evselect` to create a FITS image file from a FITS event list file. As a default it creates a file named "image.fits" and this file will be overwritten each time the function is called. If you want your image file to have a unique name then use the function input "image_file". For example:
@@ -155,10 +165,10 @@ def make_fits_image(event_list_file, image_file='image.fits'):
 
     w('evselect', inargs).run()
 
-    hdu = fits.open(image_file)
-    my_js9.SetFITS(hdu)
-    my_js9.SetColormap('heat',1,0.5)
-    my_js9.SetScale("log")
+    with fits.open(image_file) as hdu:
+        my_js9.SetFits(hdu)
+        my_js9.SetColormap('heat',1,0.5)
+        my_js9.SetScale("log")
     
     return image_file
 ```
@@ -227,7 +237,7 @@ The second keyword in the expressions, `PI`, selects the preferred pulse height 
 
 Finally, the `#XMMEA_EM` (`#XMMEA_EP` for the PN) filter provides a canned screening set of `FLAG` values for the event. The `FLAG` value provides a bit encoding of various event conditions, e.g., near hot pixels or outside of the field of view. Setting `FLAG == 0` in the selection expression provides the most conservative screening criteria and should always be used when serious spectral analysis is to be done on the PN. It typically is not necessary for the MOS.
 
-It is a good idea to keep the output filtered event files and use them in your analyses, as opposed to re-filtering the original file with every task. This will save much time and computer memory. As an example, the Lockman Hole data's original event file is 48.4 Mb; the fully filtered list (that is, filtered spatially, temporally, and spectrally) is only 4.0Mb!
+It is a good idea to keep the output filtered event files and use them in your analyses, as opposed to re-filtering the original file with every task. This will save much time and computer memory. As an example, the Lockman Hole data's original event file is 48.4 MB; the fully filtered list (that is, filtered spatially, temporally, and spectrally) is only 4.0MB!
 
 The input arguments to `evselect` to apply the filter are:
 

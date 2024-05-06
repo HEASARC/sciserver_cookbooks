@@ -18,7 +18,7 @@ jupyter:
 - **Description:** A guide for processing data from all EPIC cameras on XMM.
 - **Level:** Beginner
 - **Data:** XMM observation of RX J122135.6+280613 (obsid=0104860501)
-- **Requirements:** Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.33.1` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
 - **Last verified to run:** 1 May 2024, for SAS v21
@@ -97,7 +97,11 @@ plt.style.use(astropy_mpl_style)
 
 ```python
 obsid = '0104860501'
-usr = os.listdir('/home/idies/workspace/Temporary/')[0]
+
+# To get your user name. Or you can just put your user name in the path for your data.
+from SciServer import Authentication as auth
+usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
+
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 odf = pysas.odfcontrol.ODFobject(obsid)
 odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)

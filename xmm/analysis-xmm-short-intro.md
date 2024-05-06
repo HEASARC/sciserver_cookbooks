@@ -7,9 +7,9 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.16.0
   kernelspec:
-    display_name: (heasoft)
+    display_name: (xmmsas)
     language: python
-    name: conda-env-heasoft-py
+    name: conda-env-xmmsas-py
 ---
 
 # pySAS Introduction -- Short Version
@@ -18,7 +18,7 @@ jupyter:
 - **Description:** A short introduction to pySAS on sciserver.
 - **Level:** Beginner
 - **Data:** XMM observation of NGC 3079 (obsid=0802710101)
-- **Requirements:** Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.33.1` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
 - **Last verified to run:** 1 May 2024, for SAS v21
@@ -27,7 +27,7 @@ jupyter:
 
 
 ## 1. Introduction
-This tutorial provides a short, basic introduction to using pySAS on SciServer. It only covers how to download observation data files and how to calibrate the data.  A much more comprehensive introduction can be found in the <a href="./xmm-pysas-intro-long.ipynb">Long pySAS Introduction</a>. This tutorial is intened for those who are already familiar with SAS commands and want to use Python to run SAS commands. A tutorial on how to learn to use SAS and pySAS for XMM analysis can be found in <a href="./xmm-ABC-guide-p1.ipynb">The XMM-Newton ABC Guide</a>. In this tutorial we will demonstrate,
+This tutorial provides a short, basic introduction to using pySAS on SciServer. It only covers how to download observation data files and how to calibrate the data.  A much more comprehensive introduction can be found in the [Long pySAS Introduction](./analysis-xmm-long-intro.md "Long pySAS Intro")Long pySAS Introduction</a>. This tutorial is intened for those who are already familiar with SAS commands and want to use Python to run SAS commands. A tutorial on how to learn to use SAS and pySAS for XMM analysis can be found in [The XMM-Newton ABC Guide](./analysis-xmm-ABC-guide-ch6-p1.md "XMM ABC Guide"). In this tutorial we will demonstrate,
 
 1. How to select a directory for data and analysis.
 2. How to copy XMM data from the HEASARC archive.
@@ -52,7 +52,13 @@ This notebook was designed to run on SciServer, but an equivelent notebook can b
 ```python
 import os
 import pysas
-usr = os.listdir('/home/idies/workspace/Temporary/')[0]
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+# To get your user name. Or you can just put your user name in the path for your data.
+from SciServer import Authentication as auth
+usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
+
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 obsid = '0802710101'
 ```
@@ -99,17 +105,7 @@ inargs = []
 w('epproc', inargs).run()
 ```
 
-```python
-w('emproc', []).run()
-```
-
-```python
-w('rgsproc', []).run()
-```
-
-```python
-w('omichain', []).run()
-```
+The most common SAS tasks to run are: `epproc`, `emproc`, `rgsproc`, and `omichain`. Each one can be run without inputs (but some inputs are needed for more advanced analysis).
 
 You can list all input arguments available to any SAS task with option `'--help'` (or `'-h'`),
 
@@ -129,7 +125,7 @@ evselect table=unfiltered_event_list.fits withfilteredset=yes \
 The input arguments should be in a list, with each input argument a separate string. Note: Some inputs require single quotes to be preserved in the string. This can be done using double quotes to form the string. i.e. `"expression='(PATTERN <= 12)&&(PI in [200:4000])&&#XMMEA_EM'"`
 
 ```python
-unfiltered_event_list = odf.files['m1evt_list'][0]
+unfiltered_event_list = "3278_0802710101_EMOS1_S001_ImagingEvts.ds"
 
 inargs = ['table={0}'.format(unfiltered_event_list), 
           'withfilteredset=yes', 
