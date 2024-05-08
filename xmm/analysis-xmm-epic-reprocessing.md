@@ -211,9 +211,9 @@ mos_flag      = None    # FLAG
 
 os.chdir(odf.work_dir)
 
-pnevt_list = odf.files['pnevt_list']
-m1evt_list = odf.files['m1evt_list']
-m2evt_list = odf.files['m2evt_list']
+pnevt_list = odf.files['PNevt_list']
+m1evt_list = odf.files['M1evt_list']
+m2evt_list = odf.files['M2evt_list']
 
 # Filter pn and make FITS image file
 if len(pnevt_list) > 0:

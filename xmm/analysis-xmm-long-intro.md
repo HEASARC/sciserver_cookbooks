@@ -219,11 +219,9 @@ As shown in the text above, the task `sasver` has no parameters.
 
 ## 5. How to continue from here?
 
-This depends on your experience level with SAS and what you are using the data for. For a tutorial on preparing and filtering your data for analysis or to make images see <a href="./xmm-ABC-guide-p1.ipynb">The XMM-Newton ABC Guide</a>, or check out any of the example notebooks.
+This depends on your experience level with SAS and what you are using the data for. For a tutorial on preparing and filtering your data for analysis or to make images see [The XMM-Newton ABC Guide](./analysis-xmm-ABC-guide-ch6-p1.md), or check out any of the example notebooks.
 
-In the next cells we show how to run from here four typical SAS tasks, three `procs` and one `chain` to process exposures taken with the EPIC PN and MOS instruments, RGS, and OM.
-
-Given that the execution of these tasks produces a lot of output, we have not run them within the notebook.
+In the next cells we show how to run four typical SAS tasks, three `procs` and one `chain`, to process exposures taken with the EPIC PN and MOS instruments, RGS, and OM. You can run these SAS tasks to see what they do. Some of them may take some time to run.
 
 ```python
 os.chdir(odf.work_dir)
@@ -260,7 +258,7 @@ evselect table=unfiltered_event_list.fits withfilteredset=yes \
     filteredset=filtered_event_list.fits filtertype=expression keepfilteroutput=yes \
     updateexposure=yes filterexposure=yes
 ```
-The input arguments should be in a list, with each input argument a separate string. Note: Some inputs require single quotes to be preserved in the string. This can be done using double quotes to form the string. i.e. `"expression='(PATTERN <= 12)&&(PI in [200:4000])&&#XMMEA_EM'"`
+The input arguments should be in a list, with each input argument a separate string. Note: Some inputs require single quotes to be preserved in the string. This can be done using double quotes to form the string. i.e. `"expression='(PATTERN <= 12)&&(PI in [200:4000])&&#XMMEA_EM'"`. An explanation of this filter, and other filters, can be found in [The XMM-Newton ABC Guide](./analysis-xmm-ABC-guide-ch6-p1.md).
 
 ```python
 unfiltered_event_list = "3278_0802710101_EMOS1_S001_ImagingEvts.ds"

@@ -187,10 +187,10 @@ def make_fits_image(event_list_file, image_file='image.fits'):
 
     w('evselect', inargs).run()
 
-    hdu = fits.open(image_file)
-    my_js9.SetFITS(hdu)
-    my_js9.SetColormap('heat',1,0.5)
-    my_js9.SetScale("log")
+    with fits.open(image_file) as hdu:
+        my_js9.SetFITS(hdu)
+        my_js9.SetColormap('heat',1,0.5)
+        my_js9.SetScale("log")
     
     return image_file
 ```
