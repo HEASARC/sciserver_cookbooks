@@ -56,7 +56,15 @@ The following notebook tutorials provide some examples of how to use the softwar
 
 &#9672; [RXTE Light Curve Example](analysis-rxte-lightcurve.md): An example of using the standard products from the PCA detector, and example of re-extracting data products using custom energy channel selection.
 
-&#9672; [RXTE Spectral Extraction and Analysis Example](analysis-rxte-spectra.ipynb): An example for collecting and analyzing a large number of spectral products using [pyXspec](https://heasarc.gsfc.nasa.gov/xanadu/xspec/python/html/index.html).
+&#9672; [RXTE Spectral Extraction and Analysis Example](analysis-rxte-spectra.md): An example for collecting and analyzing a large number of spectral products using [pyXspec](https://heasarc.gsfc.nasa.gov/xanadu/xspec/python/html/index.html).
+
+&#9672; XMM Analysis Notebooks:
+
+  - [XMM Short Introduction](./xmm/analysis-xmm-short-intro.md): A short introduction to using [`pysas`](https://github.com/XMMGOF/pysas) on SciServer.
+  - [XMM Long Introduction](./xmm/analysis-xmm-long-intro.md): A longer introduction to using [`pysas`](https://github.com/XMMGOF/pysas) on SciServer.
+  - [XMM ABC Guide: Part 1](./xmm/analysis-xmm-ABC-guide-ch6-p1.md):  A tutorial on how to apply filters to XMM data. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
+  - [XMM ABC Guide: Part 2](./xmm/analysis-xmm-ABC-guide-ch6-p2.md): A tutorial on how to extract the spectra of a point source. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
+  - [XMM EPIC Reprocessing](./xmm/analysis-xmm-epic-reprocessing.md): An introduction to processing data from all three EPIC cameras on XMM.
 
 ### 1.4 Machine Learning Modeling
 
@@ -76,4 +84,4 @@ The following notebook tutorials provide some examples of how to use the softwar
 <br />
 
 <hr style="border: 1px solid #fadbac" />
-Last updated: 02/06/2024
+Last updated: 05/06/2024
