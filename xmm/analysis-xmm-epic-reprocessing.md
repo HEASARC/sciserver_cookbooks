@@ -211,9 +211,9 @@ mos_flag      = None    # FLAG
 
 os.chdir(odf.work_dir)
 
-pnevt_list = odf.files['PNevt_list']
-m1evt_list = odf.files['M1evt_list']
-m2evt_list = odf.files['M2evt_list']
+pnevt_list = odf.files['pnevt_list']
+m1evt_list = odf.files['m1evt_list']
+m2evt_list = odf.files['m2evt_list']
 
 # Filter pn and make FITS image file
 if len(pnevt_list) > 0:
@@ -260,6 +260,8 @@ if len(m2evt_list) > 0:
 
 [<tt>emproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/emproc/index.html) and [<tt>epproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/epproc/index.html) are highly flexible tasks, which allow the user to perform a wide range of customized reduction tasks. Some [<tt>emproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/emproc/index.html) examples are listed below. The same customized reduction tasks can be performed for the EPIC-pn as well, just by substituting [<tt>emproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/emproc/index.html) with [<tt>epproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/epproc/index.html) in the commands.
 
+In the cells below the commands to run each SAS task have been commented out. If you wish to run the commands uncomment the relevant cells.
+
 - If you want to reduce only one of the cameras (EPIC-MOS1 in the example):
 
     <tt>emproc selectinstruments=yes emos1=yes</tt>
@@ -276,7 +278,7 @@ inargs
 ```
 
 ```python
-w(cmd, inargs).run()
+# w(cmd, inargs).run()
 ```
 
 - If you want to reduce only a subsample of exposures:
@@ -295,7 +297,7 @@ inargs
 ```
 
 ```python
-w(cmd, inargs).run()
+# w(cmd, inargs).run()
 ```
 
 - If you want to reduce data from 1 CCD only (#4 and #5 in the example):
@@ -314,7 +316,7 @@ inargs
 ```
 
 ```python
-w(cmd, inargs).run()
+# w(cmd, inargs).run()
 ```
 
 - If you want to change the reference pointing for the calculation of the sky coordinates to a value of your choice:
@@ -333,7 +335,7 @@ inargs
 ```
 
 ```python
-w(cmd, inargs).run()
+# w(cmd, inargs).run()
 ```
 
 - Please be aware that if you want to supply coordinates for the analysis of the EPIC-MOS Timing mode, the command is slightly different, e.g.:
@@ -356,7 +358,7 @@ inargs
 ```
 
 ```python
-w(cmd, inargs).run()
+# w(cmd, inargs).run()
 ```
 
 Parameters can be combined to accomplish simultaneously two or more of the above tasks during the same run.
@@ -399,5 +401,5 @@ inargs
 ```
 
 ```python
-w(cmd,inargs).run()
+# w(cmd,inargs).run()
 ```

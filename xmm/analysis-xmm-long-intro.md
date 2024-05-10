@@ -232,19 +232,9 @@ inargs = []
 w('epproc', inargs).run()
 ```
 
-```python
-w('emproc', []).run()
-```
+The most common SAS tasks to run are: `epproc`, `emproc`, `rgsproc`, and `omichain`. Each one can be run without inputs (but some inputs are needed for more advanced analysis).
 
-```python
-w('rgsproc', []).run()
-```
-
-```python
-w('omichain', []).run()
-```
-
-To display all possible inputs for a given task, run the task with the help option.
+You can list all input arguments available to any SAS task with option `'--help'` (or `'-h'`),
 
 ```python
 w('epproc', ['-h']).run()
