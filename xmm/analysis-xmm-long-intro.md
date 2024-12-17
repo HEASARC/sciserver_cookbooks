@@ -18,7 +18,7 @@ jupyter:
 - **Description:** A longer introduction to pySAS on sciserver.
 - **Level:** Beginner
 - **Data:** XMM observation of NGC 3079 (obsid=0802710101)
-- **Requirements:** Must be run using the `HEASARCv6.33.1` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
 - **Last verified to run:** 1 May 2024, for SAS v21
@@ -45,7 +45,7 @@ This tutorial provides a much more detailed explanation on how to use pySAS than
 
 - [`pysas` Documentation](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/pysas/index.html "pysas Documentation")
 - [`pysas` on GitHub](https://github.com/XMMGOF/pysas)
-- [Common SAS Threads](https://www.cosmos.esa.int/web/xmm-newton/sas-threads/ "SAS Threads")
+- [Common SAS Threads](https://www.cosmos.esa.int/web/xmm-newton/sas-threads/index.html "SAS Threads")
 - [Users' Guide to the XMM-Newton Science Analysis System (SAS)](https://xmm-tools.cosmos.esa.int/external/xmm_user_support/documentation/sas_usg/USG/SASUSG.html "Users' Guide")
 - [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide")
 - [XMM Newton GOF Helpdesk](https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html "Helpdesk") - Link to form to contact the GOF Helpdesk.
@@ -55,7 +55,7 @@ This tutorial provides a much more detailed explanation on how to use pySAS than
 When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
 <br><br>
 <b>Running Outside Sciserver:</b><br>
-This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'examples'.
+This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'documentation'.
 <br>
 </div>
 
@@ -99,31 +99,34 @@ By running the cell below, an Observation Data File (`odf`) object is created. B
 odf = pysas.odfcontrol.ODFobject(obsid)
 ```
 
-## 3. Run `odf.odfcompile`
+## 3. Run `odf.basic_setup`
 
 When you run the cell below the following things will happen.
 
-1. `odfcompile` will check if `data_dir` exists, and if not it will create it.
-2. Inside data_dir `odfcompile` will create a directory with the value for the obs ID (i.e. `$data_dir/0802710101/`).
-3. Inside of that, `odfcompile` will create two directories:
+1. `basic_setup` will check if `data_dir` exists, and if not it will create it.
+2. Inside data_dir `basic_setup` will create a directory with the value for the obs ID (i.e. `$data_dir/0802710101/`).
+3. Inside of that, `basic_setup` will create two directories:
 
     a. `$data_dir/0802710101/ODF` where the observation data files are kept.
     
     b. `$data_dir/0802710101/work` where the `ccf.cif`, `*SUM.SAS`, and output files are kept.
-4. `odfcompile` will automatically transfer the data for `obsid` to `$data_dir/0802710101/ODF` from the HEASARC archive.
-5. `odfcompile` will run `cfibuild` and `odfingest`.
+4. `basic_setup` will automatically transfer the data for `obsid` to `$data_dir/0802710101/ODF` from the HEASARC archive.
+5. `basic_setup` will run `cfibuild` and `odfingest`.
+6. `basic_setup` will then run the basic pipeline tasks `emproc`, `epproc`, and `rgsproc`. The output of these three tasks will be in the `work_dir`.
 
-That is it! Your data is now calibrated and ready for use with all the standard SAS commands!
+That is it! Your data is now calibrated, processed, and ready for use with all the standard SAS commands!
 
 ```python
-odf.odfcompile(data_dir=data_dir,repo='sciserver',overwrite=False)
+odf.basic_setup(data_dir=data_dir,repo='sciserver',overwrite=False)
 ```
 
 If you need to include options for either or both `cfibuild` and `odfingest`, these can be passed to `odfcompile` using the inputs `cifbuild_opts='Insert options here'` and `odfingest_opts='Insert options here'`.
+
+Input arguments for `epproc`, `emproc`, and `rgsproc` can also be passed in using `epproc_args`, `emproc_args`, or `rgsproc_args` respectively (or `epchain_args` and `emchain_args` if using the chains). By defaut `epproc`, `emproc`, and `rgsproc` will not rerun if output files are found, but they can be forced to rerun by setting `rerun=True` as an input to `basic_setup`.
  
 Another important input is `overwrite=True/False`. If set to true, it will erase **all data**, including any previous analysis output, in the obsid directory (i.e. `$data_dir/0802710101/`) and download the original files again.
  
-You can also choose the level of data products you download. If you set `level=ODF` then it will download the raw, uncalibrated data and recalibrate it. If you set `level=PPS` this will download previously calibrated data products that can be used directly for analisys.
+You can also choose the level of data products you download. If you set `level=ODF` then it will download the raw, uncalibrated data and calibrate it. If you set `level=PPS` this will download previously calibrated data products that can be used directly for analysis.
 
 
 The `odf` object will also store some useful information for analysis. For example, it stores `data_dir`, `odf_dir`, and `work_dir`:
@@ -137,17 +140,17 @@ print("Work directory: {0}".format(odf.work_dir))
 The location and name of important files are also stored in a Python dictionary in the odf object.
 
 ```python
-instrument_files = list(odf.files.keys())
-print(instrument_files,'\n')
-for instrument in instrument_files:
-    print(f'File Type: {instrument}')
-    print('>>> {0}'.format(odf.files[instrument]),'\n')
+data_files = list(odf.files.keys())
+print(data_files,'\n')
+for list_name in data_files:
+    print(f'File Type: {list_name}')
+    print('>>> {0}'.format(odf.files[list_name]),'\n')
 ```
 
-If you want more information on the function `odfcompile` run the cell below to see the function documentation.
+If you want more information on the function `basic_setup` run the cell below to see the function documentation.
 
 ```python
-odf.odfcompile?
+odf.basic_setup?
 ```
 
 ## 4. Invoking SAS tasks from notebooks
@@ -265,40 +268,33 @@ inargs = ['table={0}'.format(unfiltered_event_list),
 w('evselect', inargs).run()
 ```
 
-## 6. `basic_setup`
-For convenience there is a function called `basic_setup` which will run `odfcompile`, and then run both `epproc` and `emproc`. This allows for data to be copied into your personal data space, calibrated, and run two of the most common SAS tasks, all with a single command.
+## 6. Alternative to `basic_setup`
+
+<!-- #region -->
+The function `basic_setup` is there for convienvience and checks if things have already been run, all with a single command. Running `basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=True)` is the same as running the following commands:
 
 ```python
-odf = pysas.odfcontrol.ODFobject(obsid)
-odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
+odf.download_data(data_dir=data_dir,overwrite=False,repo='sciserver')
+odf.calibrate_odf()
+w('epproc',[]).run()
+w('emproc',[]).run()
+w('rgsproc',[]).run()
+```
+For more information on the functions `download_data` and `calibrate_odf` see the function documentation by running the cells below.
+<!-- #endregion -->
+
+```python
+odf.download_data?
 ```
 
-Running `basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=True)` is the same as running the following commands:
-
-    odf.odfcompile(data_dir=data_dir,overwrite=False,repo='sciserver')
-    w('epproc',[]).run()
-    w('emproc',[]).run()
-    
-Using the function `odf.basic_setup` with <tt>rerun=False</tt> will check if `epproc` or `emproc` have already been run and will not overwrite existing output files. If <tt>rerun=True</tt> then previous output files will be ignored and overwritten. After running `basic_setup` there will be more files listed in the `odf.files` dictionary.
-
 ```python
-instrument_files = list(odf.files.keys())
-print(instrument_files,'\n')
-for instrument in instrument_files:
-    print(f'File Type: {instrument}')
-    print('>>> {0}'.format(odf.files[instrument]),'\n')
-```
-
-For more information see the function documentation.
-
-```python
-odf.basic_setup?
+odf.calibrate_odf?
 ```
 
 ## 7. Just the Raw Data
 
-If you want to just copy the raw data, and not do anything with it, you can use the function `download_data`. The function takes `obsid` and `data_dir` (both required) and copies the data from the HEASARC on SciServer. If the directory `data_dir` does not exist, it will create it. It will also create a subdirectory for the `obsid`. <code style="background:yellow;color:black">WARNING:</code> This function will silently erase any prior data in the directory `$data_dir/obsid/`.
+If you want to just copy the raw data, and not do anything with it, you can use the function `download_data`. The function can accept a number of inputs depending on the type of data required. If the directory `data_dir` does not exist, it will create it. It will also create a subdirectory for the `obsid`.
 
 ```python
-pysas.odfcontrol.download_data(obsid,data_dir,repo='sciserver')
+odf.download_data(data_dir=data_dir,repo='sciserver')
 ```

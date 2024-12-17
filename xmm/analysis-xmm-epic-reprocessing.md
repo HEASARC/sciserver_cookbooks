@@ -18,7 +18,7 @@ jupyter:
 - **Description:** A guide for processing data from all EPIC cameras on XMM.
 - **Level:** Beginner
 - **Data:** XMM observation of RX J122135.6+280613 (obsid=0104860501)
-- **Requirements:** Must be run using the `HEASARCv6.33.1` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
 - **Last verified to run:** 1 May 2024, for SAS v21
@@ -39,7 +39,7 @@ The user will obtain calibrated and concatenated event lists which can be direct
 
 - [`pysas` Documentation](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/pysas/index.html "pysas Documentation")
 - [`pysas` on GitHub](https://github.com/XMMGOF/pysas)
-- [Common SAS Threads](https://www.cosmos.esa.int/web/xmm-newton/sas-threads/ "SAS Threads")
+- [Common SAS Threads](https://www.cosmos.esa.int/web/xmm-newton/sas-threads/index.html "SAS Threads")
 - [Users' Guide to the XMM-Newton Science Analysis System (SAS)](https://xmm-tools.cosmos.esa.int/external/xmm_user_support/documentation/sas_usg/USG/SASUSG.html "Users' Guide")
 - [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide")
 - [XMM Newton GOF Helpdesk](https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html "Helpdesk") - Link to form to contact the GOF Helpdesk.
@@ -49,7 +49,7 @@ The user will obtain calibrated and concatenated event lists which can be direct
 When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
 <br><br>
 <b>Running Outside Sciserver:</b><br>
-This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'examples'.
+This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'documentation'.
 <br>
 </div>
 
@@ -260,7 +260,8 @@ if len(m2evt_list) > 0:
 
 [<tt>emproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/emproc/index.html) and [<tt>epproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/epproc/index.html) are highly flexible tasks, which allow the user to perform a wide range of customized reduction tasks. Some [<tt>emproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/emproc/index.html) examples are listed below. The same customized reduction tasks can be performed for the EPIC-pn as well, just by substituting [<tt>emproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/emproc/index.html) with [<tt>epproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/epproc/index.html) in the commands.
 
-In the cells below the commands to run each SAS task have been commented out. If you wish to run the commands uncomment the relevant cells.
+<div class="alert alert-block alert-info">
+<b>Note:</b> In the cells below the commands to run each SAS task have been commented out. If you wish to run the commands uncomment the relevant cells.</div>
 
 - If you want to reduce only one of the cameras (EPIC-MOS1 in the example):
 

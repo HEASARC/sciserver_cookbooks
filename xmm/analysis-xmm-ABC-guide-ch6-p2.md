@@ -18,7 +18,7 @@ jupyter:
 - **Description:** XMM-Newton ABC Guide, Chapter 6, Part 2.
 - **Level:** Beginner
 - **Data:** XMM observation of the Lockman Hole (obsid=0123700101)
-- **Requirements:** Must be run using the `HEASARCv6.33.1` image.  Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.34` image.  Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
 - **Last verified to run:** 1 May 2024, for SAS v21
@@ -44,7 +44,7 @@ This tutorial is based on Chapter 6 from the The XMM-Newton ABC Guide prepared b
 
 - [`pysas` Documentation](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/pysas/index.html "pysas Documentation")
 - [`pysas` on GitHub](https://github.com/XMMGOF/pysas)
-- [Common SAS Threads](https://www.cosmos.esa.int/web/xmm-newton/sas-threads/ "SAS Threads")
+- [Common SAS Threads](https://www.cosmos.esa.int/web/xmm-newton/sas-threads/index.html "SAS Threads")
 - [Users' Guide to the XMM-Newton Science Analysis System (SAS)](https://xmm-tools.cosmos.esa.int/external/xmm_user_support/documentation/sas_usg/USG/SASUSG.html "Users' Guide")
 - [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide")
 - [XMM Newton GOF Helpdesk](https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html "Helpdesk") - Link to form to contact the GOF Helpdesk.
@@ -54,7 +54,7 @@ This tutorial is based on Chapter 6 from the The XMM-Newton ABC Guide prepared b
 When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
 <br><br>
 <b>Running Outside Sciserver:</b><br>
-This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'examples'.
+This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'documentation'.
 <br>
 </div>
 
@@ -82,7 +82,13 @@ from astropy.table import Table
 plt.style.use(astropy_mpl_style)
 ```
 
-Now we need to let pySAS know which Obs ID we are working with. If you have already worked through Part 1 of this tutorial then when you run `basic_setup` it will auto-detect the observation files.
+<!-- #region -->
+Now we need to let pySAS know which Obs ID we are working with. As with Part 1 for demonstration purposes we will use the pipeline processed event list. If you downloaded the uncalibrated data files in Part 1 then if you run 
+```python
+odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
+```
+it will auto-detect the observation files and event lists created in Part 1.
+<!-- #endregion -->
 
 ```python
 obsid = '0123700101'
@@ -93,11 +99,19 @@ usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
 
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 odf = pysas.odfcontrol.ODFobject(obsid)
-odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
+# Download event list
+odf.basic_setup(data_dir=data_dir,repo='sciserver',overwrite=False,
+                run_epproc=False,run_emproc=False,run_rgsproc=False,
+                level='PPS',filename='P0123700101M1S001MIEVLI0000.FTZ')
+# Download calibration index file
+odf.basic_setup(data_dir=data_dir,repo='sciserver',overwrite=False,
+                run_epproc=False,run_emproc=False,run_rgsproc=False,
+                level='PPS',filename='P0123700101OBX000CALIND0000.FTZ')
+os.environ['SAS_CCF'] = os.path.join(odf.pps_dir,'P0123700101OBX000CALIND0000.FTZ')
 os.chdir(odf.work_dir)
 
 # File names for this notebook. The User can change these file names.
-unfiltered_event_list = odf.files['m1evt_list'][0]
+unfiltered_event_list = odf.files['PPS'][0]
 temporary_event_list = 'temporary_event_list.fits'
 light_curve_file ='mos1_ltcrv.fits'
 gti_rate_file = 'gti_rate.fits'
@@ -114,11 +128,7 @@ eml_list_file = 'emllist.fits'
 If you have already worked through Part 1 of this tutorial you can skip the next cell. But if not, or if you want to run it again, the necessary code from Part 1 is in the cell below.
 <!-- #endregion -->
 
-```python editable=true slideshow={"slide_type": ""}
-odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
-
-os.chdir(odf.work_dir)
-
+```python
 # "Standard" Filter
 inargs = ['table={0}'.format(unfiltered_event_list), 
           'withfilteredset=yes', 

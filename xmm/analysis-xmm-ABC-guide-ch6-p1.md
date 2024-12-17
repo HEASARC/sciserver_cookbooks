@@ -18,7 +18,7 @@ jupyter:
 - **Description:** XMM-Newton ABC Guide, Chapter 6, Part 1.
 - **Level:** Beginner
 - **Data:** XMM observation of the Lockman Hole (obsid=0123700101)
-- **Requirements:** Must be run using the `HEASARCv6.33.1` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
 - **Last verified to run:** 1 May 2024, for SAS v21
@@ -41,7 +41,7 @@ This tutorial is based on Chapter 6 from the The [The XMM-Newton ABC Guide](http
 
 - [`pysas` Documentation](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/pysas/index.html "pysas Documentation")
 - [`pysas` on GitHub](https://github.com/XMMGOF/pysas)
-- [Common SAS Threads](https://www.cosmos.esa.int/web/xmm-newton/sas-threads/ "SAS Threads")
+- [Common SAS Threads](https://www.cosmos.esa.int/web/xmm-newton/sas-threads/index.html "SAS Threads")
 - [Users' Guide to the XMM-Newton Science Analysis System (SAS)](https://xmm-tools.cosmos.esa.int/external/xmm_user_support/documentation/sas_usg/USG/SASUSG.html "Users' Guide")
 - [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide")
 - [XMM Newton GOF Helpdesk](https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html "Helpdesk") - Link to form to contact the GOF Helpdesk.
@@ -51,7 +51,7 @@ This tutorial is based on Chapter 6 from the The [The XMM-Newton ABC Guide](http
 When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
 <br><br>
 <b>Running Outside Sciserver:</b><br>
-This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'examples'.
+This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'documentation'.
 <br>
 </div>
 
@@ -82,10 +82,6 @@ from astropy.table import Table
 plt.style.use(astropy_mpl_style)
 ```
 
-<div class="alert alert-block alert-info">
-    <b>Note:</b> Running <tt>epproc</tt> and <tt>emproc</tt> on this particular obsid may take several (>30) minutes. Be prepared to wait.
-</div>
-
 ```python
 obsid = '0123700101'
 
@@ -94,13 +90,25 @@ from SciServer import Authentication as auth
 usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
 
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
+
 odf = pysas.odfcontrol.ODFobject(obsid)
-odf.basic_setup(data_dir=data_dir, overwrite=False, repo='sciserver',
-                rerun=False, epproc_args=['withoutoftime=yes'])
+odf.basic_setup(data_dir=data_dir,repo='sciserver',overwrite=False,
+                run_epproc=False,run_emproc=False,run_rgsproc=False,
+                level='PPS',filename='P0123700101M1S001MIEVLI0000.FTZ')
 ```
 
 <!-- #region -->
-Running `odf.basic_setup` will run `epproc` and `emproc` on the data. The output from those tasks will not display in the cell output, but will be written to log files found in the `obsid` work directory.
+For demonstration purposes we will start with the processed event list from the pipeline products (`PPS`) instead of the raw observational data files (`ODF`). You can run this notebook using the following command instead:
+
+```python
+odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
+```
+
+If you use the `ODFs` then running `odf.basic_setup` will recalibrate the data and run `epproc`, `emproc`, and `rgsproc` on the data. The output from those tasks will not display in the cell output, but will be written to log files found in the `obsid` work directory.
+
+<div class="alert alert-block alert-info">
+    <b>Note:</b> If you use the <tt>ODFs</tt> instead of the <tt>PPS</tt> files then running <tt>epproc</tt>, <tt>emproc</tt>, and <tt>rgsproc</tt> on this particular obsid may take several (>40) minutes. Be prepared to wait.
+</div>
 
 If the dataset has more than one exposure, a specific exposure can be accessed using the <tt>withinstexpids</tt> and <tt>instexpids</tt> parameters, e.g.:
 
@@ -109,16 +117,16 @@ inargs = "withinstexpids=yes instexpids='M1S001 M2S001'"
 w('emproc', inargs).run()
 ```
 
-<div class="alert alert-block alert-info">
-    <b>Note:</b> For PN observations with very bright sources, out-of-time events can provide a serious contamination of the image. Out-of-time events occur because the read-out period for the CCDs can be up to $\sim6.3$% of the frame time. Since events that occur during the read-out period can't be distinguished from others events, they are included in the event files but have invalid locations. For observations with bright sources, this can cause bright stripes in the image along the CCD read-out direction.
-</div>
-
 To create an out-of-time event file for your PN data, add the parameter <tt>withoutoftime</tt> to your <tt>epproc</tt> invocation:
 
 ```python
 inargs = ["withoutoftime=yes"]
 w('epproc', inargs).run()
 ```
+
+<div class="alert alert-block alert-info">
+    <b>Note:</b> For PN observations with very bright sources, out-of-time events can provide a serious contamination of the image. Out-of-time events occur because the read-out period for the CCDs can be up to $\sim6.3$% of the frame time. Since events that occur during the read-out period can't be distinguished from others events, they are included in the event files but have invalid locations. For observations with bright sources, this can cause bright stripes in the image along the CCD read-out direction.
+</div>
 
 By default, these tasks do not keep any intermediate files they generate. <tt>Emproc</tt> and <tt>epproc</tt> designate their output event files with "*ImagingEvts.ds".
 <!-- #endregion -->
@@ -211,7 +219,7 @@ We need to change into the work directory to run the next SAS tasks. We also get
 
 ```python
 os.chdir(odf.work_dir)
-mos1 = odf.files['m1evt_list'][0]
+mos1 = odf.files['PPS'][0]
 ```
 
 Here we plot an image of the raw data with no filters applied. The image should be very noisy.
@@ -483,13 +491,14 @@ We have demonstrated various filtering techniques to remove noise from the raw o
 
 Below we have included a short script that incorporates all of the filtering steps for a single observation for MOS1, but without making any plots or image files. Note: How you filter on `RATE` or `TIME` will depend on the light curve of each individual observation. For exceptionally bright sources you may only have to apply the standard filter.
 
-```python editable=true slideshow={"slide_type": ""}
+<!-- #region -->
+```python
 obsid = '0123700101'
-usr = os.listdir('/home/idies/workspace/Temporary/')[0]
+from SciServer import Authentication as auth
+usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 odf = pysas.odfcontrol.ODFobject(obsid)
-odf.basic_setup(data_dir=data_dir,overwrite=False,repo='heasarc',
-                rerun=False,epproc_args=['withoutoftime=yes'])
+odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
 
 os.chdir(odf.work_dir)
 unfiltered_event_list = odf.files['m1evt_list'][0]
@@ -543,3 +552,4 @@ inargs = ['table={0}'.format(temporary_event_list),
 
 w('evselect', inargs).run()
 ```
+<!-- #endregion -->
