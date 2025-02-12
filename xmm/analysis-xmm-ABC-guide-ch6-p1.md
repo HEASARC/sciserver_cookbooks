@@ -12,6 +12,7 @@ jupyter:
     name: conda-env-xmmsas-py
 ---
 
+<!-- #region editable=true slideshow={"slide_type": ""} -->
 # ABC Guide for XMM-Newton -- Part 1
 <hr style="border: 2px solid #fadbac" />
 
@@ -21,10 +22,10 @@ jupyter:
 - **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 1 May 2024, for SAS v21
+- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.6
 
 <hr style="border: 2px solid #fadbac" />
-
+<!-- #endregion -->
 
 ## Introduction
 This tutorial is based on Chapter 6 from the The [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide") prepared by the NASA/GSFC XMM-Newton Guest Observer Facility. This notebook assumes you are at least minimally familiar with pySAS on SciServer (see the [Long pySAS Introduction](./analysis-xmm-long-intro.md "Long pySAS Intro")). 
@@ -284,8 +285,9 @@ Now we plot the filtered image. It should have less noise now.
 make_fits_image(filtered_event_list)
 ```
 
+<!-- #region editable=true slideshow={"slide_type": ""} -->
 ## 6.4 Create Light Curve
-
+<!-- #endregion -->
 
 Sometimes, it is necessary to use filters on time in addition to those mentioned above. This is because of soft proton background flaring, which can have count rates of 100 counts/sec or higher across the entire bandpass. It should be noted that the amount of flaring that needs to be removed depends in part on the object observed; a faint, extended object will be more affected than a very bright X-ray source.
 
@@ -402,7 +404,7 @@ This method requires a text file as input. The file should be in ASCII format wi
 ```python
 gti_lines = ['0        73227600 + # Good time from the start of the observation',
              '73211800 73212000 - # But without a small flare here.',
-             '73211800 73212000 - # And here.']
+             '73220400 73220600 - # And here.']
 
 with open('gti.txt', 'w') as f:
     f.writelines(gti_lines)
@@ -449,8 +451,9 @@ make_fits_image(mos1_new_gti, image_file='final_image3.fits')
 plot_light_curve(mos1_new_gti)
 ```
 
+<!-- #region editable=true slideshow={"slide_type": ""} -->
 #### 6.5.4 Filter on `TIME` by Explicit Reference
-
+<!-- #endregion -->
 
 Finally, we could have chosen to forgo making a secondary GTI file altogether, and simply filtered on `TIME` with the standard filtering expression (see §6.3). The filtering expression from §6.3 can be combined with the filtering expression from §6.5.2 and filter the raw data all in one step. In this case, the full filtering expression would be:
 
@@ -484,12 +487,14 @@ plot_light_curve(full_filt_event_list)
 
 ### Conclusion
 
-We have demonstrated various filtering techniques to remove noise from the raw observation data. In Part 2 we will cover source detection, spectra extraction, pile up, and preparing the spectra for analysis by creating a redistribution matrix file (RMF) and an ancillary response file (ARF).
+We have demonstrated various filtering techniques to remove noise from the raw observation data. Note: How you filter on `RATE` or `TIME` will depend on the light curve of each individual observation. For exceptionally bright sources you may only have to apply the standard filter.
+
+In Part 2 we will cover source detection, spectra extraction, pile up, and preparing the spectra for analysis by creating a redistribution matrix file (RMF) and an ancillary response file (ARF).
 
 
 ---
 
-Below we have included a short script that incorporates all of the filtering steps for a single observation for MOS1, but without making any plots or image files. Note: How you filter on `RATE` or `TIME` will depend on the light curve of each individual observation. For exceptionally bright sources you may only have to apply the standard filter.
+Below we have included a short script that incorporates all of the filtering steps for a single observation for MOS1, but without making any plots or image files. 
 
 <!-- #region -->
 ```python

@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 28 Oct 2024, for SAS v21
+- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.6
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -104,7 +104,7 @@ usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 
 odf = pysas.odfcontrol.ODFobject(obsid)
-odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False,run_rgsproc=False)
+odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False,run_rgsproc=False,run_emproc=False)
 ```
 
 We start by reprocessing the data. The SAS task `epproc` will automatically detect if the data was taken in either imaging mode or timing mode.
@@ -160,15 +160,10 @@ def make_fits_image(event_list_file, image_file='image.fits', expression=None):
     
     w('evselect', inargs).run()
 
-    #hdu = fits.open(image_file)[0]
     with fits.open(image_file) as hdu:
         my_js9.SetFITS(hdu)
         my_js9.SetColormap('heat',1,0.5)
         my_js9.SetScale("log")
-    
-    #plt.imshow(hdu.data, origin='lower', norm='log', aspect=0.2) ###change this to js9 command
-    #plt.colorbar()
-    #plt.show()
 
     return image_file
 ```
@@ -241,7 +236,7 @@ The filtering expression for the PN in Timing mode is:
 ```
 The first two expressions will select good events with PATTERN in the 0 to 4 range. The PATTERN value is similar the GRADE selection for ASCA data, and is related to the number and pattern of the CCD pixels triggered for a given event. Single pixel events have PATTERN == 0, while double pixel events have PATTERN in [1:4].
 
-The second keyword in the expressions, PI, selects the preferred pulse height of the event; for the PN, this should be between 200 and 15000 eV. This should clean up the image significantly with most of the rest of the obvious contamination due to low pulse height events. Setting the lower PI channel limit somewhat higher (e.g., to 300 or 400 eV) will eliminate much of the Here we will use a lower limit of 400 eV. rest.
+The second keyword in the expressions, PI, selects the preferred pulse height of the event; for the PN, this should be between 200 and 15000 eV. This should clean up the image significantly with most of the rest of the obvious contamination due to low pulse height events. Setting the lower PI channel limit somewhat higher (e.g., to 300 or 400 eV) will eliminate much of the rest. Here we will use a lower limit of 4.
 
 Finally, the #XMMEA_EP filter provides a canned screening set of FLAG values for the event. (The FLAG value provides a bit encoding of various event conditions, e.g., near hot pixels or outside of the field of view.) Setting FLAG == 0 in the selection expression provides the most conservative screening criteria and should always be used when serious spectral analysis is to be done on PN data.
 

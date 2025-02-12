@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 15 November 2024, for SAS v21
+- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.6
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -80,7 +80,7 @@ That is it! Your data is now calibrated, processed, and ready for use with all t
 
 ```python
 odf = pysas.odfcontrol.ODFobject(obsid)
-odf.calibrate_odf(data_dir=data_dir,repo='sciserver',overwrite=False)
+odf.basic_setup(data_dir=data_dir,repo='sciserver',overwrite=False)
 ```
 
 If you want more information on the function `basic_setup` run the cell below or see the long introduction tutorial.

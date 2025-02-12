@@ -22,7 +22,7 @@ jupyter:
 - **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 1 May 2024, for SAS v21
+- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.6
 
 <hr style="border: 2px solid #fadbac" />
 <!-- #endregion -->
@@ -123,7 +123,7 @@ odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False,
                 run_epproc=False,run_emproc=False,rgsproc_args=rgsproc_args)
 
 odf.download_data(data_dir=data_dir,repo='sciserver',level='PPS',
-                  filename='P0123700101OBX000CALIND0000.FTZ')
+                  filename='P0153950701OBX000CALIND0000.FTZ')
 ```
 
 The input arguments for `rgsproc` are:
@@ -138,12 +138,10 @@ Note the last keyword, `spectrumbinning`. If you want to merge data from the sam
 This takes several minutes, and outputs 12 files per RGS, plus 3 general use FITS files. As before, links to the event list files are stored in `odf.files['R1evt_list']` and `odf.files['R2evt_list']`. Filenames and paths to any spectra produced can be found in `odf.files['R1spectra']` and `odf.files['R2spectra']`.
 
 ```python
-odf.files['R1evt_list'] = [os.path.join(odf.work_dir,'P0153950701R1S001EVENLI0000.FIT')]
-odf.files['R2evt_list'] = [os.path.join(odf.work_dir,'P0153950701R2S002EVENLI0000.FIT')]
-odf.files['R1spectra']  = [os.path.join(odf.work_dir,'P0153950701R1S001SRSPEC1001.FIT'),
-                           os.path.join(odf.work_dir,'P0153950701R1S001SRSPEC2001.FIT')]
-odf.files['R2spectra']  = [os.path.join(odf.work_dir,'P0153950701R2S002SRSPEC1001.FIT'),
-                           os.path.join(odf.work_dir,'P0153950701R2S002SRSPEC2001.FIT')]
+print(odf.files['R1evt_list'])
+print(odf.files['R2evt_list'])
+print(odf.files['R1spectra'])
+print(odf.files['R2spectra'])
 ```
 
 <div class="alert alert-block alert-info">
