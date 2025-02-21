@@ -67,6 +67,7 @@ The following notebook tutorials provide some examples of how to use the softwar
   - [XMM ABC Guide: RGS Data](./xmm/analysis-xmm-ABC-guide-RGS-data.md): A tutorial on how to prepare RGS data for analysis. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
   - [XMM ABC Guide: Timing Mode](./xmm/analysis-xmm-ABC-guide-timing-mode.md): A tutorial on how to use timing mode data. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
   - [XMM EPIC Reprocessing](./xmm/analysis-xmm-epic-reprocessing.md): An introduction to processing data from all three EPIC cameras on XMM.
+  - [XMM ABC Guide: Sprectrum Fitting with pyXSPEC](./xmm/analysis-xmm-ABC-guide-spectra-fitting.md): A tutorial on how to fit EPIC spectra using pyXSPEC.
 
 ### 1.4 Machine Learning Modeling
 
@@ -86,4 +87,4 @@ The following notebook tutorials provide some examples of how to use the softwar
 <br />
 
 <hr style="border: 1px solid #fadbac" />
-Last updated: 02/12/2025
+Last updated: 02/21/2025
