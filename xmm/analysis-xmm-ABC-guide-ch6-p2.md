@@ -116,11 +116,6 @@ temporary_event_list = 'temporary_event_list.fits'
 light_curve_file ='mos1_ltcrv.fits'
 gti_rate_file = 'gti_rate.fits'
 filtered_event_list = 'filtered_event_list.fits'
-attitude_file = 'attitude.fits'
-soft_band_file = 'mos1-s.fits'
-hard_band_file = 'mos1-h.fits'
-mos_all_file = 'mos1-all.fits'
-eml_list_file = 'emllist.fits'
 ```
 
 <!-- #region editable=true slideshow={"slide_type": ""} -->
@@ -296,15 +291,15 @@ filtered_bkg = 'bkg_filtered.fits'
 source_spectra_file = 'mos1_pi.fits'
 bkg_spectra_file = 'bkg_pi.fits'
 
-inargs = {'table': '{0}'.format(filtered_event_list),
+inargs = {'table': filtered_event_list,
           'energycolumn': 'PI',
           'withfilteredset': 'yes',
-          'filteredset': '{0}'.format(filtered_source),
+          'filteredset': filtered_source,
           'keepfilteroutput': 'yes',
           'filtertype': 'expression',
           'expression': "'((X,Y) in CIRCLE(26188.5,22816.5,300))'",
           'withspectrumset': 'yes',
-          'spectrumset': '{0}'.format(source_spectra_file),
+          'spectrumset': source_spectra_file,
           'spectralbinsize': '5',
           'withspecranges': 'yes',
           'specchannelmin': '0',
@@ -312,15 +307,15 @@ inargs = {'table': '{0}'.format(filtered_event_list),
 
 w('evselect', inargs).run()
 
-inargs = {'table': '{0}'.format(filtered_event_list),
+inargs = {'table': filtered_event_list,
           'energycolumn': 'PI',
           'withfilteredset': 'yes',
-          'filteredset': '{0}'.format(filtered_bkg),
+          'filteredset': filtered_bkg,
           'keepfilteroutput': 'yes',
           'filtertype': 'expression',
           'expression': "'((X,Y) in CIRCLE(26188.5,22816.5,1500))&&!((X,Y) in CIRCLE(26188.5,22816.5,500))'",
           'withspectrumset': 'yes',
-          'spectrumset': '{0}'.format(bkg_spectra_file),
+          'spectrumset': bkg_spectra_file,
           'spectralbinsize': '5',
           'withspecranges': 'yes',
           'specchannelmin': '0',
@@ -453,12 +448,12 @@ To find the source and background extraction areas explicitly,
 
 ```python
 inargs = ['spectrumset={0}'.format(source_spectra_file),
-          'badpixlocation=mos1_filt_time.fits']
+          'badpixlocation={0}'.format(filtered_event_list)]
 
 w('backscale', inargs).run()
 
 inargs = ['spectrumset={0}'.format(bkg_spectra_file),
-          'badpixlocation=mos1_filt_time.fits']
+          'badpixlocation={0}'.format(filtered_event_list)]
 
 w('backscale', inargs).run()
 ```
@@ -478,25 +473,52 @@ Now we can use `arfgen` with the RMF, spectrum, and event file to make the ancil
     withrmfset - flag to use the RMF
     rmfset - RMF file created by rmfgen
     withbadpixcorr - flag to include the bad pixel correction
-    badpixlocation - file containing the bad pixel information; should be set to the event file from which the spectrum was extracted.
+    badpixlocation - file containing the bad pixel information; should be set to the event file from which the spectrum was extracted
     setbackscale - flag to calculate the area of the source region and write it to the BACKSCAL keyword in the spectrum header
-    
-At this point, the spectrum stored in the file `mos1_pi.fits` is ready to be analyzed using an analysis package such as XSPEC.
 
 ```python
-inargs = {'rmfset': 'mos1_rmf.fits',
-          'spectrumset': '{0}'.format(source_spectra_file)}
+rmf_file = 'mos1_rmf.fits'
+arf_file = 'mos1_arf.fits'
+
+inargs = {}
+inargs = {'rmfset': rmf_file,
+          'spectrumset': source_spectra_file}
 
 w('rmfgen', inargs).run()
 
 inargs = {}
-inargs = {'arfset': 'mos1_arf.fits',
-          'spectrumset': '{0}'.format(source_spectra_file),
+inargs = {'arfset': arf_file,
+          'spectrumset': source_spectra_file,
           'withrmfset': 'yes',
-          'rmfset': 'mos1_rmf.fits',
+          'rmfset': rmf_file,
           'withbadpixcorr': 'yes',
-          'badpixlocation': 'mos1_filt_time.fits',
+          'badpixlocation': filtered_event_list,
           'setbackscale': 'yes'}
 
 w('arfgen', inargs).run()
 ```
+
+To analize the spectra the individual photon counts need to be grouped into energy bins. We also need to include the filenames of the ARF, RMF, and background spectra in the header of the grouped spectra file. We do this by using the `specgroup` command. The input arguments are:
+
+    spectrumset - name of the input (ungrouped) sprectra file
+    groupedset - name of the output (grouped) spectra file
+    arfset - ARF file name
+    rmfset - RMF file name
+    backgndset - background spectra file name
+    mincounts - the minimum number of counts per bin; the bins will be sized to reach the mincounts value
+
+```python
+grouped_spectra = 'mos1_grp.fits'
+
+inargs = {}
+inargs = {'spectrumset': source_spectra_file,
+          'groupedset': grouped_spectra,
+          'arfset': arf_file,
+          'rmfset': rmf_file,
+          'backgndset': bkg_spectra_file,
+          'mincounts': '30'}
+
+w('specgroup', inargs).run()
+```
+
+At this point, the spectrum stored in the file `mos1_grp.fits` is ready to be analyzed using an analysis package such as XSPEC. For a simple example of that see the notebook [Fitting an EPIC Spectrum in XSPEC](./analysis-xmm-ABC-guide-spectra-fitting.ipynb) based on Chapter 13 of the ABC Guide.
