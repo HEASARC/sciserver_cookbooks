@@ -18,10 +18,10 @@ jupyter:
 - **Description:** A short introduction to pySAS on sciserver.
 - **Level:** Beginner
 - **Data:** XMM observation of NGC 3079 (obsid=0802710101)
-- **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.35` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.6
+- **Last verified to run:** 12 March 2025, for SAS v21 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -104,7 +104,7 @@ inargs = []
 w('emproc', inargs).run()
 ```
 
-The most common SAS tasks to run are: `epproc`, `emproc`, `rgsproc`, and `omichain`. Each one can be run without inputs (but some inputs are needed for more advanced analysis).
+The most common SAS tasks to run are: `epproc`, `emproc`, and `rgsproc`. Each one can be run without inputs (but some inputs are needed for more advanced analysis). These tasks have been folded into the function `basic_setup`, but they can be run individually.
 
 You can list all input arguments available to any SAS task with option `'--help'` (or `'-h'`),
 

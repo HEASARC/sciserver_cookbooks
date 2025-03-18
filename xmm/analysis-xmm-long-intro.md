@@ -18,10 +18,10 @@ jupyter:
 - **Description:** A longer introduction to pySAS on sciserver.
 - **Level:** Beginner
 - **Data:** XMM observation of NGC 3079 (obsid=0802710101)
-- **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.35` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.6
+- **Last verified to run:** 12 March 2025, for SAS v21 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -82,8 +82,6 @@ ___
 ```python
 import os
 import pysas
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
 
 # To get your user name. Or you can just put your user name in the path for your data.
 from SciServer import Authentication as auth
@@ -224,18 +222,11 @@ As shown in the text above, the task `sasver` has no parameters.
 
 This depends on your experience level with SAS and what you are using the data for. For a tutorial on preparing and filtering your data for analysis or to make images see [The XMM-Newton ABC Guide](./analysis-xmm-ABC-guide-ch6-p1.md), or check out any of the example notebooks.
 
-In the next cells we show how to run four typical SAS tasks, three `procs` and one `chain`, to process exposures taken with the EPIC PN and MOS instruments, RGS, and OM. You can run these SAS tasks to see what they do. Some of them may take some time to run.
-
 ```python
 os.chdir(odf.work_dir)
 ```
 
-```python
-inargs = []
-w('epproc', inargs).run()
-```
-
-The most common SAS tasks to run are: `epproc`, `emproc`, `rgsproc`, and `omichain`. Each one can be run without inputs (but some inputs are needed for more advanced analysis).
+The most common SAS tasks to run are: `epproc`, `emproc`, and `rgsproc`. Each one can be run without inputs (but some inputs are needed for more advanced analysis). These tasks have been folded into the function `basic_setup`, but they can be run individually.
 
 You can list all input arguments available to any SAS task with option `'--help'` (or `'-h'`),
 

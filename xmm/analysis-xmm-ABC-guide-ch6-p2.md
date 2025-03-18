@@ -18,10 +18,10 @@ jupyter:
 - **Description:** XMM-Newton ABC Guide, Chapter 6, Part 2.
 - **Level:** Beginner
 - **Data:** XMM observation of the Lockman Hole (obsid=0123700101)
-- **Requirements:** Must be run using the `HEASARCv6.34` image.  Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.35` image.  Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.6
+- **Last verified to run:** 12 March 2025, for SAS v21 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -32,9 +32,7 @@ This tutorial is based on Chapter 6 from the The XMM-Newton ABC Guide prepared b
 #### SAS Tasks to be Used
 
 - `evselect`[(Documentation for evselect)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/evselect/index.html)
-- `edetect_chain`[(Documentation for edetect_chain)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/edetect_chain/index.html)
 - `atthkgen `[(Documentation for atthkgen)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/atthkgen/index.html)
-- `srcdisplay`[(Documentation for srcdisplay)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/srcdisplay/index.html)
 - `epatplot`[(Documentation for epatplot)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/epatplot/index.html)
 - `backscale`[(Documentation for backscale)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/backscale/index.html)
 - `rmfgen`[(Documentation for rmfgen)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/rmfgen/index.html)
@@ -339,15 +337,15 @@ bkg_loc = bkg_region['lcs']
 
 ```python
 expression = "'((X,Y) in CIRCLE({x:.1f},{y:.1f},{radius:.1f}))'".format(x=source_loc['x'],y=source_loc['y'],radius=source_loc['radius'])
-inargs = {'table': '{0}'.format(filtered_event_list),
+inargs = {'table': filtered_event_list,
           'energycolumn': 'PI',
           'withfilteredset': 'yes',
-          'filteredset': '{0}'.format(filtered_source),
+          'filteredset': filtered_source,
           'keepfilteroutput': 'yes',
           'filtertype': 'expression',
           'expression': expression,
           'withspectrumset': 'yes',
-          'spectrumset': '{0}'.format(source_spectra_file),
+          'spectrumset': source_spectra_file,
           'spectralbinsize': '5',
           'withspecranges': 'yes',
           'specchannelmin': '0',
@@ -358,15 +356,15 @@ w('evselect', inargs).run()
 
 ```python
 expression = "((X,Y) in CIRCLE({x:.1f},{y:.1f},{radiuso:.1f}))&&!((X,Y) in CIRCLE({x:.1f},{y:.1f},{radiusi:.1f}))".format(x=bkg_loc['x'],y=bkg_loc['y'],radiuso=bkg_loc['radii'][1],radiusi=bkg_loc['radii'][0])
-inargs = {'table': '{0}'.format(filtered_event_list),
+inargs = {'table': filtered_event_list,
           'energycolumn': 'PI',
           'withfilteredset': 'yes',
-          'filteredset': '{0}'.format(filtered_bkg),
+          'filteredset': filtered_bkg,
           'keepfilteroutput': 'yes',
           'filtertype': 'expression',
           'expression': expression,
           'withspectrumset': 'yes',
-          'spectrumset': '{0}'.format(bkg_spectra_file),
+          'spectrumset': bkg_spectra_file,
           'spectralbinsize': '5',
           'withspecranges': 'yes',
           'specchannelmin': '0',

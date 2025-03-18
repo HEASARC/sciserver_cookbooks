@@ -18,10 +18,10 @@ jupyter:
 - **Description:** A guide for processing data from all EPIC cameras on XMM.
 - **Level:** Beginner
 - **Data:** XMM observation of RX J122135.6+280613 (obsid=0104860501)
-- **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.35` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.6
+- **Last verified to run:** 12 March 2025, for SAS v21 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -104,7 +104,7 @@ usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
 
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 odf = pysas.odfcontrol.ODFobject(obsid)
-odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
+odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False,run_rgsproc=False)
 ```
 
 The odf object contains a dictionary with the path and filename for important output files created by `basic_setup`.

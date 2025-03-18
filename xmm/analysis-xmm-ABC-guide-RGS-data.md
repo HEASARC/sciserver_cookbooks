@@ -19,10 +19,10 @@ jupyter:
 - **Description:** XMM-Newton ABC Guide, Chapter 10.
 - **Level:** Beginner
 - **Data:** XMM observation of Mkn 421(obsid=0153950701)
-- **Requirements:** Must be run using the `HEASARCv6.34` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.35` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.6
+- **Last verified to run:** 1 January 2025, for SAS v21 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 <!-- #endregion -->
@@ -451,6 +451,10 @@ where
     filepha - output merged spectrum
     filermf - output merged response matrix
     filebkg - output merged badkground spectrum
-    rmfgrid - number of energy bins; should be the same as the input RMFs
+    rmfgrid - number of energy bins; should be the same as the input RMFs (i.e. should match the input `rows` for `rgsrmfgen`)
     
 The spectra are ready for analysis. To prepare the spectrum for fitting please consult [Chapter 14 in the ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/node16.html#Chap:rgs-fit-xspec).
+
+```python
+
+```

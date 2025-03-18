@@ -64,10 +64,13 @@ The following notebook tutorials provide some examples of how to use the softwar
   - [XMM Long Introduction](./xmm/analysis-xmm-long-intro.md): A longer introduction to using [`pysas`](https://github.com/XMMGOF/pysas) on SciServer.
   - [XMM ABC Guide: Part 1](./xmm/analysis-xmm-ABC-guide-ch6-p1.md):  A tutorial on how to apply filters to XMM data. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
   - [XMM ABC Guide: Part 2](./xmm/analysis-xmm-ABC-guide-ch6-p2.md): A tutorial on how to extract the spectra of a point source. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
+  - [XMM ABC Guide: Sprectrum Fitting with pyXSPEC](./xmm/analysis-xmm-ABC-guide-spectra-fitting.md): A tutorial on how to fit EPIC spectra using pyXSPEC.
   - [XMM ABC Guide: RGS Data](./xmm/analysis-xmm-ABC-guide-RGS-data.md): A tutorial on how to prepare RGS data for analysis. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
   - [XMM ABC Guide: Timing Mode](./xmm/analysis-xmm-ABC-guide-timing-mode.md): A tutorial on how to use timing mode data. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
   - [XMM EPIC Reprocessing](./xmm/analysis-xmm-epic-reprocessing.md): An introduction to processing data from all three EPIC cameras on XMM.
-  - [XMM ABC Guide: Sprectrum Fitting with pyXSPEC](./xmm/analysis-xmm-ABC-guide-spectra-fitting.md): A tutorial on how to fit EPIC spectra using pyXSPEC.
+  - [XMM Optical Monitor](./xmm/analysis-xmm-ABC-guide-optical-monitor.md): A tutorial on how to use data from the Optical Monitor on XMM. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
+  - [Automatic Source Detection](./xmm/analysis-xmm-source-detection-p1.md): An example on how to use `edetect_chain` to automatically detect sources.
+
 
 ### 1.4 Machine Learning Modeling
 
