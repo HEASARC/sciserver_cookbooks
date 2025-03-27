@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** Must be run using the `HEASARCv6.35` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 12 March 2025, for SAS v21 and pySAS v1.4.8
+- **Last verified to run:** 26 March 2025, for SAS v22.1 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 

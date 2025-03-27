@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** Must be run using the `HEASARCv6.35` image.  Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 12 March 2025, for SAS v21 and pySAS v1.4.8
+- **Last verified to run:** 26 March 2025, for SAS v22.1 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -97,19 +97,13 @@ usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
 
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 odf = pysas.odfcontrol.ODFobject(obsid)
-# Download event list
-odf.basic_setup(data_dir=data_dir,repo='sciserver',overwrite=False,
-                run_epproc=False,run_emproc=False,run_rgsproc=False,
-                level='PPS',filename='P0123700101M1S001MIEVLI0000.FTZ')
-# Download calibration index file
-odf.basic_setup(data_dir=data_dir,repo='sciserver',overwrite=False,
-                run_epproc=False,run_emproc=False,run_rgsproc=False,
-                level='PPS',filename='P0123700101OBX000CALIND0000.FTZ')
-os.environ['SAS_CCF'] = os.path.join(odf.pps_dir,'P0123700101OBX000CALIND0000.FTZ')
+
+odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',
+                run_epproc=False,rerun=False,run_rgsproc=False)
 os.chdir(odf.work_dir)
 
 # File names for this notebook. The User can change these file names.
-unfiltered_event_list = odf.files['PPS'][0]
+unfiltered_event_list = odf.files['M1evt_list'][0]
 temporary_event_list = 'temporary_event_list.fits'
 light_curve_file ='mos1_ltcrv.fits'
 gti_rate_file = 'gti_rate.fits'

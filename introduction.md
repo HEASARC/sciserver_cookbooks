@@ -70,6 +70,7 @@ The following notebook tutorials provide some examples of how to use the softwar
   - [XMM EPIC Reprocessing](./xmm/analysis-xmm-epic-reprocessing.md): An introduction to processing data from all three EPIC cameras on XMM.
   - [XMM Optical Monitor](./xmm/analysis-xmm-ABC-guide-optical-monitor.md): A tutorial on how to use data from the Optical Monitor on XMM. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
   - [Automatic Source Detection](./xmm/analysis-xmm-source-detection-p1.md): An example on how to use `edetect_chain` to automatically detect sources.
+  - [Dealing With Pile-up](./xmm/analysis-xmm-dealing-with-pile-up.md): A tutorial on how to deal with pile-up for bright EPIC sources.
 
 
 ### 1.4 Machine Learning Modeling

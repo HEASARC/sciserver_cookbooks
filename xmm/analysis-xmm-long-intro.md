@@ -21,7 +21,7 @@ jupyter:
 - **Requirements:** Must be run using the `HEASARCv6.35` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 12 March 2025, for SAS v21 and pySAS v1.4.8
+- **Last verified to run:** 26 March 2025, for SAS v22.1 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -159,58 +159,49 @@ Now we are ready to execute any SAS task needed to analize our data. To execute 
 from pysas.wrapper import Wrapper as w
 ```
 
-Any SAS task accepts arguments which can be either specific options, e.g. <tt>--version</tt>, which shows the task's version, or parameters with format <tt>param=value</tt>. When the task is invoked from the command line, these arguments follow the name of the task. However, in Notebooks we have to pass them to the task in a different way. This is done using a Python list, whose name you are free to choose. Let the name of such list be <tt>inargs</tt>.
+Any SAS task accepts arguments which can be either specific options, e.g. `--version`, which shows the task's version, or parameters with format `param=value`. When the task is invoked from the command line, these arguments follow the name of the task. However, in Notebooks we have to pass them to the task in a different way. This is done using a Python list, whose name you are free to choose. Let the name of such list be `inargs`.
 
-To pass the option <tt>--version</tt> to the task to be executed, we must define <tt>inargs</tt> as,
+To pass the option `--version` to the task to be executed, we must define `inargs` as,
 
 ```python
 inargs = ['--version']
 ```
 
-To execute the task, we will use the <tt>Wrapper</tt> component imported earlier from <tt>pysas</tt>, as <tt>w</tt> (which is a sort of alias), as follows,
+To execute the task, we will use the `Wrapper` component imported earlier from <tt>pySAS</tt>, as `w` (which is a sort of alias), as follows,
 
 ```python
-t = w('sasver', inargs)
+t = w('evselect', inargs)
 ```
 
-In Python terms, <tt>t</tt> is an *instantiation* of the object <tt>Wrapper</tt> (or its alias <tt>w</tt>).
+In Python terms, `t` is an *instantiation* of the object `Wrapper` (or its alias `w`).
 
-To run `sasver` [(click here for sasver documentation)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/sasver/index.html "Documentation for sasver"), we can now do as follows,
+To run `evselect` [(click here for evselect documentation)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/evselect/index.html "Documentation for sasver") with the input `--version`, we can now do as follows,
 
 ```python
 t.run()
 ```
 
-This output is equivalent to having run `sasver` in the command line with argument <tt>--version</tt>.
+This output is equivalent to having run `evselect` in the command line with argument `--version`.
 
-Each SAS task, regardless of the task being a Python task or not, accepts a predefined set of options. To list which are these options, we can always invoke the task with option <tt>--help</tt> (or <tt>-h</tt> as well).
+Each SAS task, regardless of the task being a Python task or not, accepts a predefined set of options. To list which are these options, we can always invoke the task with option `--help` (or `-h` as well).
 
-With `sasver`, as with some other SAS tasks, we could define <tt>inargs</tt> as an empty list, which is equivalent to run the task in the command line without options, like this,
+With some SAS tasks, we could define `inargs` as an empty list, which is equivalent to run the task in the command line without options.
 
-```python
-inargs = []
-t = w('sasver', inargs)
-t.run()
-```
-
-That is indeed the desired output of the task `sasver`.
 
 A similar result can be achieved by combining all the previous steps into a single expression, like this,
 
 ```python
-w('sasver', []).run()
+w('evselect', ['-v']).run()
 ```
 
-The output of `sasver` provides useful information on which version of SAS is being run and which SAS environment variables are defined.
-
-**Note**: It is important to always use [ ] when passing parameters to a task when using the wrapper, as parameters and options have to be passed in the form of a list. For example,  <tt>w('evselect', ['-h']).run()</tt>, will execute the SAS task `evselect` with option <tt>-h</tt>.
+**Note**: It is important to always use [ ] when passing parameters to a task when using the wrapper, as parameters and options have to be passed in the form of a list. For example,  `w('evselect', ['-h']).run()`, will execute the SAS task `evselect` with option `-h`.
 
 
 ### Listing available options
 As noted earlier, we can list all options available to any SAS task with option <tt>--help</tt> (or <tt>-h</tt>),
 
 ```python
-w('sasver', ['-h']).run()
+w('evselect', ['-h']).run()
 ```
 
 As explained in the help text shown here, if the task would have had any available parameters, we would get a listing of them immediately after the help text.
@@ -228,11 +219,6 @@ os.chdir(odf.work_dir)
 
 The most common SAS tasks to run are: `epproc`, `emproc`, and `rgsproc`. Each one can be run without inputs (but some inputs are needed for more advanced analysis). These tasks have been folded into the function `basic_setup`, but they can be run individually.
 
-You can list all input arguments available to any SAS task with option `'--help'` (or `'-h'`),
-
-```python
-w('epproc', ['-h']).run()
-```
 
 Here is an example of how to apply a "standard" filter. This is equivelant to running the following SAS command:
 
