@@ -22,7 +22,7 @@ jupyter:
 - **Requirements:** Must be run using the `HEASARCv6.35` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Jenna Cann (Feb 2025)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 15 March 2025, for SAS v21 and pySAS v1.4.8
+- **Last verified to run:** 26 March 2025, for SAS v22.1 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 <!-- #endregion -->
@@ -148,7 +148,7 @@ os.chdir(odf.om_dir)
 
 inargs = ["processmosaicedimages=yes"]
 
-w('omichain', inargs).run()
+#w('omichain', inargs).run()
 ```
 
 You can also run omichain with various parameters  as shown [here](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/omichain/node13.html "here"). As an example, let's try the above with several specific flags related to source detection. Since this will create a whole new set of OM files, we will create a new subdirectory within the `work_dir` and run `omichain` in it with the new parameters.
@@ -171,7 +171,7 @@ os.chdir(odf.om_dir)
 
 inargs = ["processmosaicedimages=yes", "omdetectnsigma=2.0", "omdetectminsignificance=3.0"]
 
-w('omichain', inargs).run()
+#w('omichain', inargs).run()
 ```
 
 The flags above include:
@@ -244,27 +244,12 @@ For displaying images we are using a `ds9` clone, `JS9`. It has all the same fun
 my_js9 = jpyjs9.JS9(width = 800, height = 800, side=True)
 ```
 
-<div class="alert alert-block alert-warning">
-    <b>Warning:</b> Currently there is an issue with JS9 on SciServer that prevents it from loading files larger than ~7 MB. Until this issue is resolved we suggest the following work around for displaying the mosaiced images that are ~20 MB.
-</div>
-
-In the file viewer to the left, navigate to the directory containing the processed OM files for this Obs ID (the directory named `OM_files` inside the work directory). The path to that directory can be seen by running the cell below:
+Now we will load the image and region files.
 
 ```python
-print(odf.om_dir)
+my_js9.jupyterLoad(os.path.join(odf.om_dir,'P0123700101OMS000RSIMAGW.FIT'))
+my_js9.LoadRegions(os.path.join(odf.om_dir,'P0123700101OMS000RSIMAGW.reg'))
 ```
-
-Mannually download the mosaiced sky-image `P0123700101OMS000RSIMAGW.FIT` with the "white" filter and associated region file `P0123700101OMS000RSIMAGW.reg`. You can find these by searching in the `OM_files` directory for the file name `P0123700101OMS000RSIMAGW` as shown in the image below.
-
-
-<center><img src="_files/om_file_download.png"/></center>
-
-
-Once you have downloaded the image and region files you can then import both files using the JS9 GUI as shown below.
-
-
-<center><img src="_files/om_load_file_load_regions.png"/></center>
-
 
 If the region files match up well with the sources seen in the image, the data has been processed correctly. An example of a correctly processed image can be seen below:
 
