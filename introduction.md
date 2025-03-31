@@ -71,6 +71,8 @@ The following notebook tutorials provide some examples of how to use the softwar
   - [XMM Optical Monitor](./xmm/analysis-xmm-ABC-guide-optical-monitor.md): A tutorial on how to use data from the Optical Monitor on XMM. Based on [The XMM-Newton ABC Guide](https://heasarc.gsfc.nasa.gov/docs/xmm/abc/ "ABC Guide").
   - [Automatic Source Detection](./xmm/analysis-xmm-source-detection-p1.md): An example on how to use `edetect_chain` to automatically detect sources.
   - [Dealing With Pile-up](./xmm/analysis-xmm-dealing-with-pile-up.md): A tutorial on how to deal with pile-up for bright EPIC sources.
+  - [RGS EPIC Joint Fitting: Part 1](./xmm/analysis-xmm-RGS-EPIC-Joint-Fitting-Part-1.md): A tutorial on how to jointly fit RGS and EPIC spectra using XSPEC, Part 1.
+  - [RGS EPIC Joint Fitting: Part 2](./xmm/analysis-xmm-RGS-EPIC-Joint-Fitting-Part-2.md): A tutorial on how to jointly fit RGS and EPIC spectra using XSPEC, Part 2.
 
 
 ### 1.4 Machine Learning Modeling
@@ -91,4 +93,4 @@ The following notebook tutorials provide some examples of how to use the softwar
 <br />
 
 <hr style="border: 1px solid #fadbac" />
-Last updated: 02/21/2025
+Last updated: 03/31/2025
