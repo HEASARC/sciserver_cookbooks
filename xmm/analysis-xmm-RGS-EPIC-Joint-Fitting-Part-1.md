@@ -289,7 +289,7 @@ def make_spectrum(filtered_event_list, filtered_source, filtered_bkg, source_spe
 Let's use the make_fits_image command to identify our ideal source and background regions.
 
 ```python
-make_fits_image('mos1_filt.fits')
+make_fits_image(mos1)
 ```
 
 As there is limited area to extract a background spectrum in the pn image, we will focus on the spectra from the MOS1 and MOS2 images.
