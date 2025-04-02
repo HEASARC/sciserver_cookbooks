@@ -18,10 +18,10 @@ jupyter:
 - **Description:** A guide for processing data from all EPIC cameras on XMM.
 - **Level:** Beginner
 - **Data:** XMM observation of RX J122135.6+280613 (obsid=0104860501)
-- **Requirements:** Must be run using the `HEASARCv6.33.1` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.35` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 1 May 2024, for SAS v21
+- **Last verified to run:** 26 March 2025, for SAS v22.1 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -49,7 +49,7 @@ The user will obtain calibrated and concatenated event lists which can be direct
 When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
 <br><br>
 <b>Running Outside Sciserver:</b><br>
-This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'examples'.
+This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'documentation'.
 <br>
 </div>
 
@@ -104,7 +104,7 @@ usr = auth.getKeystoneUserWithToken(auth.getToken()).userName
 
 data_dir = os.path.join('/home/idies/workspace/Temporary/',usr,'scratch/xmm_data')
 odf = pysas.odfcontrol.ODFobject(obsid)
-odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
+odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False,run_rgsproc=False)
 ```
 
 The odf object contains a dictionary with the path and filename for important output files created by `basic_setup`.
@@ -211,9 +211,9 @@ mos_flag      = None    # FLAG
 
 os.chdir(odf.work_dir)
 
-pnevt_list = odf.files['pnevt_list']
-m1evt_list = odf.files['m1evt_list']
-m2evt_list = odf.files['m2evt_list']
+pnevt_list = odf.files['PNevt_list']
+m1evt_list = odf.files['M1evt_list']
+m2evt_list = odf.files['M2evt_list']
 
 # Filter pn and make FITS image file
 if len(pnevt_list) > 0:
@@ -260,7 +260,8 @@ if len(m2evt_list) > 0:
 
 [<tt>emproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/emproc/index.html) and [<tt>epproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/epproc/index.html) are highly flexible tasks, which allow the user to perform a wide range of customized reduction tasks. Some [<tt>emproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/emproc/index.html) examples are listed below. The same customized reduction tasks can be performed for the EPIC-pn as well, just by substituting [<tt>emproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/emproc/index.html) with [<tt>epproc</tt>](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/epproc/index.html) in the commands.
 
-In the cells below the commands to run each SAS task have been commented out. If you wish to run the commands uncomment the relevant cells.
+<div class="alert alert-block alert-info">
+<b>Note:</b> In the cells below the commands to run each SAS task have been commented out. If you wish to run the commands uncomment the relevant cells.</div>
 
 - If you want to reduce only one of the cameras (EPIC-MOS1 in the example):
 

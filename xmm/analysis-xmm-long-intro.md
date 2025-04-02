@@ -18,10 +18,10 @@ jupyter:
 - **Description:** A longer introduction to pySAS on sciserver.
 - **Level:** Beginner
 - **Data:** XMM observation of NGC 3079 (obsid=0802710101)
-- **Requirements:** Must be run using the `HEASARCv6.33.1` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
+- **Requirements:** Must be run using the `HEASARCv6.35` image. Run in the <tt>(xmmsas)</tt> conda environment on Sciserver. You should see <tt>(xmmsas)</tt> at the top right of the notebook. If not, click there and select <tt>(xmmsas)</tt>.
 - **Credit:** Ryan Tanner (April 2024)
 - **Support:** <a href="https://heasarc.gsfc.nasa.gov/docs/xmm/xmm_helpdesk.html">XMM Newton GOF Helpdesk</a>
-- **Last verified to run:** 1 May 2024, for SAS v21
+- **Last verified to run:** 26 March 2025, for SAS v22.1 and pySAS v1.4.8
 
 <hr style="border: 2px solid #fadbac" />
 
@@ -55,7 +55,7 @@ This tutorial provides a much more detailed explanation on how to use pySAS than
 When running this notebook inside Sciserver, make sure the HEASARC data drive is mounted when initializing the Sciserver compute container. <a href='https://heasarc.gsfc.nasa.gov/docs/sciserver/'>See details here</a>.
 <br><br>
 <b>Running Outside Sciserver:</b><br>
-This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'examples'.
+This notebook was designed to run on SciServer, but an equivelent notebook can be found on <a href="https://github.com/XMMGOF/pysas">GitHub</a>. You will need to install the development version of pySAS found on GitHub (<a href="https://github.com/XMMGOF/pysas">pySAS on GitHub</a>). There are installation instructions on GitHub and example notebooks can be found inside the directory named 'documentation'.
 <br>
 </div>
 
@@ -82,8 +82,6 @@ ___
 ```python
 import os
 import pysas
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
 
 # To get your user name. Or you can just put your user name in the path for your data.
 from SciServer import Authentication as auth
@@ -99,31 +97,34 @@ By running the cell below, an Observation Data File (`odf`) object is created. B
 odf = pysas.odfcontrol.ODFobject(obsid)
 ```
 
-## 3. Run `odf.odfcompile`
+## 3. Run `odf.basic_setup`
 
 When you run the cell below the following things will happen.
 
-1. `odfcompile` will check if `data_dir` exists, and if not it will create it.
-2. Inside data_dir `odfcompile` will create a directory with the value for the obs ID (i.e. `$data_dir/0802710101/`).
-3. Inside of that, `odfcompile` will create two directories:
+1. `basic_setup` will check if `data_dir` exists, and if not it will create it.
+2. Inside data_dir `basic_setup` will create a directory with the value for the obs ID (i.e. `$data_dir/0802710101/`).
+3. Inside of that, `basic_setup` will create two directories:
 
     a. `$data_dir/0802710101/ODF` where the observation data files are kept.
     
     b. `$data_dir/0802710101/work` where the `ccf.cif`, `*SUM.SAS`, and output files are kept.
-4. `odfcompile` will automatically transfer the data for `obsid` to `$data_dir/0802710101/ODF` from the HEASARC archive.
-5. `odfcompile` will run `cfibuild` and `odfingest`.
+4. `basic_setup` will automatically transfer the data for `obsid` to `$data_dir/0802710101/ODF` from the HEASARC archive.
+5. `basic_setup` will run `cfibuild` and `odfingest`.
+6. `basic_setup` will then run the basic pipeline tasks `emproc`, `epproc`, and `rgsproc`. The output of these three tasks will be in the `work_dir`.
 
-That is it! Your data is now calibrated and ready for use with all the standard SAS commands!
+That is it! Your data is now calibrated, processed, and ready for use with all the standard SAS commands!
 
 ```python
-odf.odfcompile(data_dir=data_dir,repo='sciserver',overwrite=False)
+odf.basic_setup(data_dir=data_dir,repo='sciserver',overwrite=False)
 ```
 
 If you need to include options for either or both `cfibuild` and `odfingest`, these can be passed to `odfcompile` using the inputs `cifbuild_opts='Insert options here'` and `odfingest_opts='Insert options here'`.
+
+Input arguments for `epproc`, `emproc`, and `rgsproc` can also be passed in using `epproc_args`, `emproc_args`, or `rgsproc_args` respectively (or `epchain_args` and `emchain_args` if using the chains). By defaut `epproc`, `emproc`, and `rgsproc` will not rerun if output files are found, but they can be forced to rerun by setting `rerun=True` as an input to `basic_setup`.
  
 Another important input is `overwrite=True/False`. If set to true, it will erase **all data**, including any previous analysis output, in the obsid directory (i.e. `$data_dir/0802710101/`) and download the original files again.
  
-You can also choose the level of data products you download. If you set `level=ODF` then it will download the raw, uncalibrated data and recalibrate it. If you set `level=PPS` this will download previously calibrated data products that can be used directly for analisys.
+You can also choose the level of data products you download. If you set `level=ODF` then it will download the raw, uncalibrated data and calibrate it. If you set `level=PPS` this will download previously calibrated data products that can be used directly for analysis.
 
 
 The `odf` object will also store some useful information for analysis. For example, it stores `data_dir`, `odf_dir`, and `work_dir`:
@@ -137,17 +138,17 @@ print("Work directory: {0}".format(odf.work_dir))
 The location and name of important files are also stored in a Python dictionary in the odf object.
 
 ```python
-instrument_files = list(odf.files.keys())
-print(instrument_files,'\n')
-for instrument in instrument_files:
-    print(f'File Type: {instrument}')
-    print('>>> {0}'.format(odf.files[instrument]),'\n')
+data_files = list(odf.files.keys())
+print(data_files,'\n')
+for list_name in data_files:
+    print(f'File Type: {list_name}')
+    print('>>> {0}'.format(odf.files[list_name]),'\n')
 ```
 
-If you want more information on the function `odfcompile` run the cell below to see the function documentation.
+If you want more information on the function `basic_setup` run the cell below to see the function documentation.
 
 ```python
-odf.odfcompile?
+odf.basic_setup?
 ```
 
 ## 4. Invoking SAS tasks from notebooks
@@ -158,58 +159,49 @@ Now we are ready to execute any SAS task needed to analize our data. To execute 
 from pysas.wrapper import Wrapper as w
 ```
 
-Any SAS task accepts arguments which can be either specific options, e.g. <tt>--version</tt>, which shows the task's version, or parameters with format <tt>param=value</tt>. When the task is invoked from the command line, these arguments follow the name of the task. However, in Notebooks we have to pass them to the task in a different way. This is done using a Python list, whose name you are free to choose. Let the name of such list be <tt>inargs</tt>.
+Any SAS task accepts arguments which can be either specific options, e.g. `--version`, which shows the task's version, or parameters with format `param=value`. When the task is invoked from the command line, these arguments follow the name of the task. However, in Notebooks we have to pass them to the task in a different way. This is done using a Python list, whose name you are free to choose. Let the name of such list be `inargs`.
 
-To pass the option <tt>--version</tt> to the task to be executed, we must define <tt>inargs</tt> as,
+To pass the option `--version` to the task to be executed, we must define `inargs` as,
 
 ```python
 inargs = ['--version']
 ```
 
-To execute the task, we will use the <tt>Wrapper</tt> component imported earlier from <tt>pysas</tt>, as <tt>w</tt> (which is a sort of alias), as follows,
+To execute the task, we will use the `Wrapper` component imported earlier from <tt>pySAS</tt>, as `w` (which is a sort of alias), as follows,
 
 ```python
-t = w('sasver', inargs)
+t = w('evselect', inargs)
 ```
 
-In Python terms, <tt>t</tt> is an *instantiation* of the object <tt>Wrapper</tt> (or its alias <tt>w</tt>).
+In Python terms, `t` is an *instantiation* of the object `Wrapper` (or its alias `w`).
 
-To run `sasver` [(click here for sasver documentation)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/sasver/index.html "Documentation for sasver"), we can now do as follows,
+To run `evselect` [(click here for evselect documentation)](https://xmm-tools.cosmos.esa.int/external/sas/current/doc/evselect/index.html "Documentation for sasver") with the input `--version`, we can now do as follows,
 
 ```python
 t.run()
 ```
 
-This output is equivalent to having run `sasver` in the command line with argument <tt>--version</tt>.
+This output is equivalent to having run `evselect` in the command line with argument `--version`.
 
-Each SAS task, regardless of the task being a Python task or not, accepts a predefined set of options. To list which are these options, we can always invoke the task with option <tt>--help</tt> (or <tt>-h</tt> as well).
+Each SAS task, regardless of the task being a Python task or not, accepts a predefined set of options. To list which are these options, we can always invoke the task with option `--help` (or `-h` as well).
 
-With `sasver`, as with some other SAS tasks, we could define <tt>inargs</tt> as an empty list, which is equivalent to run the task in the command line without options, like this,
+With some SAS tasks, we could define `inargs` as an empty list, which is equivalent to run the task in the command line without options.
 
-```python
-inargs = []
-t = w('sasver', inargs)
-t.run()
-```
-
-That is indeed the desired output of the task `sasver`.
 
 A similar result can be achieved by combining all the previous steps into a single expression, like this,
 
 ```python
-w('sasver', []).run()
+w('evselect', ['-v']).run()
 ```
 
-The output of `sasver` provides useful information on which version of SAS is being run and which SAS environment variables are defined.
-
-**Note**: It is important to always use [ ] when passing parameters to a task when using the wrapper, as parameters and options have to be passed in the form of a list. For example,  <tt>w('evselect', ['-h']).run()</tt>, will execute the SAS task `evselect` with option <tt>-h</tt>.
+**Note**: It is important to always use [ ] when passing parameters to a task when using the wrapper, as parameters and options have to be passed in the form of a list. For example,  `w('evselect', ['-h']).run()`, will execute the SAS task `evselect` with option `-h`.
 
 
 ### Listing available options
 As noted earlier, we can list all options available to any SAS task with option <tt>--help</tt> (or <tt>-h</tt>),
 
 ```python
-w('sasver', ['-h']).run()
+w('evselect', ['-h']).run()
 ```
 
 As explained in the help text shown here, if the task would have had any available parameters, we would get a listing of them immediately after the help text.
@@ -221,24 +213,12 @@ As shown in the text above, the task `sasver` has no parameters.
 
 This depends on your experience level with SAS and what you are using the data for. For a tutorial on preparing and filtering your data for analysis or to make images see [The XMM-Newton ABC Guide](./analysis-xmm-ABC-guide-ch6-p1.md), or check out any of the example notebooks.
 
-In the next cells we show how to run four typical SAS tasks, three `procs` and one `chain`, to process exposures taken with the EPIC PN and MOS instruments, RGS, and OM. You can run these SAS tasks to see what they do. Some of them may take some time to run.
-
 ```python
 os.chdir(odf.work_dir)
 ```
 
-```python
-inargs = []
-w('epproc', inargs).run()
-```
+The most common SAS tasks to run are: `epproc`, `emproc`, and `rgsproc`. Each one can be run without inputs (but some inputs are needed for more advanced analysis). These tasks have been folded into the function `basic_setup`, but they can be run individually.
 
-The most common SAS tasks to run are: `epproc`, `emproc`, `rgsproc`, and `omichain`. Each one can be run without inputs (but some inputs are needed for more advanced analysis).
-
-You can list all input arguments available to any SAS task with option `'--help'` (or `'-h'`),
-
-```python
-w('epproc', ['-h']).run()
-```
 
 Here is an example of how to apply a "standard" filter. This is equivelant to running the following SAS command:
 
@@ -265,40 +245,33 @@ inargs = ['table={0}'.format(unfiltered_event_list),
 w('evselect', inargs).run()
 ```
 
-## 6. `basic_setup`
-For convenience there is a function called `basic_setup` which will run `odfcompile`, and then run both `epproc` and `emproc`. This allows for data to be copied into your personal data space, calibrated, and run two of the most common SAS tasks, all with a single command.
+## 6. Alternative to `basic_setup`
+
+<!-- #region -->
+The function `basic_setup` is there for convienvience and checks if things have already been run, all with a single command. Running `basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=True)` is the same as running the following commands:
 
 ```python
-odf = pysas.odfcontrol.ODFobject(obsid)
-odf.basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=False)
+odf.download_data(data_dir=data_dir,overwrite=False,repo='sciserver')
+odf.calibrate_odf()
+w('epproc',[]).run()
+w('emproc',[]).run()
+w('rgsproc',[]).run()
+```
+For more information on the functions `download_data` and `calibrate_odf` see the function documentation by running the cells below.
+<!-- #endregion -->
+
+```python
+odf.download_data?
 ```
 
-Running `basic_setup(data_dir=data_dir,overwrite=False,repo='sciserver',rerun=True)` is the same as running the following commands:
-
-    odf.odfcompile(data_dir=data_dir,overwrite=False,repo='sciserver')
-    w('epproc',[]).run()
-    w('emproc',[]).run()
-    
-Using the function `odf.basic_setup` with <tt>rerun=False</tt> will check if `epproc` or `emproc` have already been run and will not overwrite existing output files. If <tt>rerun=True</tt> then previous output files will be ignored and overwritten. After running `basic_setup` there will be more files listed in the `odf.files` dictionary.
-
 ```python
-instrument_files = list(odf.files.keys())
-print(instrument_files,'\n')
-for instrument in instrument_files:
-    print(f'File Type: {instrument}')
-    print('>>> {0}'.format(odf.files[instrument]),'\n')
-```
-
-For more information see the function documentation.
-
-```python
-odf.basic_setup?
+odf.calibrate_odf?
 ```
 
 ## 7. Just the Raw Data
 
-If you want to just copy the raw data, and not do anything with it, you can use the function `download_data`. The function takes `obsid` and `data_dir` (both required) and copies the data from the HEASARC on SciServer. If the directory `data_dir` does not exist, it will create it. It will also create a subdirectory for the `obsid`. <code style="background:yellow;color:black">WARNING:</code> This function will silently erase any prior data in the directory `$data_dir/obsid/`.
+If you want to just copy the raw data, and not do anything with it, you can use the function `download_data`. The function can accept a number of inputs depending on the type of data required. If the directory `data_dir` does not exist, it will create it. It will also create a subdirectory for the `obsid`.
 
 ```python
-pysas.odfcontrol.download_data(obsid,data_dir,repo='sciserver')
+odf.download_data(data_dir=data_dir,repo='sciserver')
 ```
